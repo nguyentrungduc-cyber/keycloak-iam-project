@@ -32,8 +32,7 @@ Browser → Client App (Node.js) → KeyCloak (Docker)
 ### 1. Clone repo
 
 ```bash
-git clone https://github.com/your-team/keycloak-iam-project.git
-cd keycloak-iam-project
+git clone https://github.com/nguyentrungduc-cyber/keycloak-iam-project.git
 ```
 
 ### 2. Tạo file .env

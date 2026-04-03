@@ -1,0 +1,26 @@
+# Biến môi trường — KHÔNG bao giờ commit file này
+.env
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Logs
+*.log
+logs/
+
+# KeyCloak data (tự sinh ra khi chạy)
+keycloak/data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Build output
+dist/
+build/

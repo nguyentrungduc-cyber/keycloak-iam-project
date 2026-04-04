@@ -91,6 +91,7 @@ bash scripts/seed-users.sh
 ## Tài liệu chi tiết
 
 - [Hướng dẫn cài đặt](docs/setup.md)
+- [Hướng dẫn cấu hình keycloak](docs/keycloak-configuration.md)
 - [Phân quyền RBAC](docs/rbac.md)
 - [Xác thực MFA](docs/mfa.md)
 - [Tích hợp SAML 2.0](docs/saml.md)

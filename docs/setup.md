@@ -25,15 +25,39 @@ cp .env.example .env
 Mở file `.env` và điền giá trị:
 
 ```
+# ⚠️ HƯỚNG DẪN: Sao chép file này thành .env và điền giá trị thật.
+# ⚠️ QUAN TRỌNG: KHÔNG ĐƯỢC commit file .env lên GitHub để tránh lộ mật khẩu.
+
+# ── KeyCloak Admin (Tài khoản quản trị tối cao của Keycloak) ──
+# Dùng để đăng nhập vào trang quản trị (Admin Console)
 KC_ADMIN_USER=admin
-KC_ADMIN_PASSWORD=Admin@1234       # Đặt mật khẩu mạnh hơn
+KC_ADMIN_PASSWORD=Admin@1234       # Nên đổi thành mật khẩu mạnh hơn khi triển khai thực tế
+
+# ── Database (Thông số kết nối cơ sở dữ liệu) ────────────────
+# Keycloak sẽ dùng thông tin này để tạo và quản lý bảng trong DB
 DB_USER=keycloak
-DB_PASSWORD=keycloak123
-KC_REALM=myrealm
-KC_CLIENT_ID=myapp
-KC_CLIENT_SECRET=                  # Điền sau khi tạo client trong KC
-APP_PORT=3000
-SESSION_SECRET=random-string-here
+DB_PASSWORD=keycloak123            # Mật khẩu dùng cho Database trong Docker
+
+# ── Keycloak Server ──────────────────────────────────────────
+KEYCLOAK_PORT=8080                 # Cổng chạy dịch vụ Keycloak (mặc định là 8080)
+
+# ── Client App (Thông tin kết nối giữa App và Keycloak) ──────
+KC_REALM=uit-keycloak-realm        # Tên Realm bạn đã tạo trong Keycloak
+KC_CLIENT_ID=myapp-client          # ID của Client đã tạo trong mục Clients
+KC_CLIENT_SECRET=                  # Lấy tại tab 'Credentials' của Client trong Keycloak
+KC_SERVER_URL=http://localhost:8080 # Đường dẫn gốc để App gọi đến Server Keycloak
+
+# Thông số của ứng dụng phía Client (Node.js/React/ASP.NET)
+APP_PORT=3000                      # Cổng chạy ứng dụng của nhóm
+SESSION_SECRET=random-string-here  # Chuỗi ký tự ngẫu nhiên để mã hóa phiên làm việc
+
+# ── Social Login (Điền sau khi tạo OAuth App trên Google/GitHub) ──
+# Thông tin xác thực từ các nền tảng bên thứ ba
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
 ```
 
 ## Bước 3 — Khởi động KeyCloak

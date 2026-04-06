@@ -88,6 +88,15 @@
         "attributes": {}
       },
       {
+        "id": "347743ed-4524-44db-82eb-ba255593dc23",
+        "name": "staff",
+        "description": "",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "ff70f815-16fb-42ef-9a2f-19a711e64c56",
+        "attributes": {}
+      },
+      {
         "id": "14dc9a46-af41-4325-8421-6330b1b3fadd",
         "name": "admin",
         "description": "",
@@ -333,7 +342,17 @@
           "attributes": {}
         }
       ],
-      "myapp": [],
+      "myapp": [
+        {
+          "id": "ceaab74c-8628-4f53-832a-7824eae2a05f",
+          "name": "User",
+          "description": "",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "571ce761-36d7-49e0-ae8d-073d8a9e5072",
+          "attributes": {}
+        }
+      ],
       "account": [
         {
           "id": "93252bd2-829f-4354-a9f1-824bed08463c",
@@ -424,7 +443,19 @@
       ]
     }
   },
-  "groups": [],
+  "groups": [
+    {
+      "id": "eaee2c28-0cbf-43c7-9e94-89bbb9eafd9a",
+      "name": "NhanVien_MyApp",
+      "path": "/NhanVien_MyApp",
+      "subGroups": [],
+      "attributes": {},
+      "realmRoles": [
+        "staff"
+      ],
+      "clientRoles": {}
+    }
+  ],
   "defaultRole": {
     "id": "0b09b0d5-ee66-46cd-8390-61363f7dd169",
     "name": "default-roles-uit-keycloak-realm",
@@ -1441,12 +1472,12 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
+            "oidc-usermodel-property-mapper",
             "oidc-sha256-pairwise-sub-mapper",
+            "saml-user-property-mapper",
+            "oidc-usermodel-attribute-mapper",
             "saml-user-attribute-mapper",
             "oidc-address-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-user-property-mapper",
             "saml-role-list-mapper",
             "oidc-full-name-mapper"
           ]
@@ -1495,14 +1526,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
+            "oidc-usermodel-property-mapper",
             "saml-user-attribute-mapper",
             "saml-user-property-mapper",
-            "saml-role-list-mapper",
             "oidc-full-name-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "saml-role-list-mapper",
             "oidc-address-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-usermodel-property-mapper"
+            "oidc-sha256-pairwise-sub-mapper"
           ]
         }
       },

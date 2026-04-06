@@ -7,7 +7,7 @@ set -e
 KC_URL="http://localhost:8080"
 REALM="uit-keycloak-realm"
 ADMIN_USER="${KC_ADMIN_USER:-admin}"
-ADMIN_PASS="${KC_ADMIN_PASSWORD:-admin}"
+ADMIN_PASS="${KC_ADMIN_PASSWORD:-Admin@12345}"
 
 echo ">>> Đang lấy admin token..."
 TOKEN=$(curl -s -X POST "$KC_URL/realms/master/protocol/openid-connect/token" \
@@ -61,8 +61,8 @@ curl -s -X POST "$KC_URL/admin/realms/$REALM/users" \
 
 echo ""
 echo "=== Tạo users xong ==="
-echo "admin_user  / Admin@1234  → có role admin"
-echo "editor_user / Editor@1234 → có role editor"
-echo "normal_user / User@1234   → không có role đặc biệt"
+echo "admin_user  / Admin@1234567  → có role admin"
+echo "editor_user / Editor@1234567 → có role editor"
+echo "normal_user / User@1234567   → không có role đặc biệt"
 echo ""
 echo "Nhớ gán roles cho users trong Admin Console!"

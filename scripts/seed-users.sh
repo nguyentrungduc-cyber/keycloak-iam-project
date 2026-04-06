@@ -5,7 +5,7 @@
 set -e
 
 KC_URL="http://localhost:8080"
-REALM="myrealm"
+REALM="uit-keycloak-realm"
 ADMIN_USER="${KC_ADMIN_USER:-admin}"
 ADMIN_PASS="${KC_ADMIN_PASSWORD:-admin}"
 

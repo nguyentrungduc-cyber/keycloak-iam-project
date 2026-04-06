@@ -1,0 +1,67 @@
+/* Thiết lập biến màu sắc (Style Guide) để dùng chung cho cả Keycloak sau này */
+:root {
+    --bg-dark: #0f172a;        /* Nền tối */
+    --text-light: #f8fafc;     /* Chữ trắng */
+    --text-muted: #94a3b8;     /* Chữ xám nhạt (cho chú thích) */
+    --primary-color: #6366f1;  /* Xanh Indigo chủ đạo */
+    --primary-hover: #4f46e5;  /* Xanh Indigo đậm khi hover chuột */
+    --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Reset cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Kiểu dáng trang chủ */
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: var(--font-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.landing-container {
+    padding: 40px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03); /* Hiệu ứng kính mờ nhẹ */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.landing-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.landing-container p {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+/* Nút bấm siêu ngầu */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px); /* Hiệu ứng nảy lên nhẹ */
+}

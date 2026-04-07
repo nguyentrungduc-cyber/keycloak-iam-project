@@ -1,10 +1,56 @@
+<div class="landing-container">
 
-<div class="min-h-screen flex items-center justify-center bg-gray-950 text-white">
-  <div class="text-center">
-    <h1 class="text-5xl font-bold mb-4">Welcome to MyApp</h1>
-    <p class="text-xl mb-8">Ứng dụng an toàn với Keycloak</p>
-    <a href="/auth/login" class="bg-indigo-600 hover:bg-indigo-700 px-8 py-4 rounded-xl text-lg font-medium">
-      Đăng nhập ngay
-    </a>
+  <!-- Header -->
+  <div class="landing-header">
+    <div class="logo-wrap">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="8" stroke="white" stroke-width="2"/>
+        <circle cx="12" cy="12" r="2.5" fill="white"/>
+      </svg>
+    </div>
+    <span class="app-name">MyApp</span>
   </div>
+
+  <!-- Hero card -->
+  <div class="hero-card">
+    <div class="hero-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="8" stroke="white" stroke-width="2"/>
+        <circle cx="12" cy="12" r="2.5" fill="white"/>
+      </svg>
+    </div>
+
+    <h1 class="hero-title">Chào mừng đến MyApp</h1>
+    <p class="hero-sub">Nền tảng quản lý được bảo mật bởi Keycloak.<br>Đăng nhập để truy cập hệ thống.</p>
+
+    <% if (locals.error) { %>
+      <div class="alert alert-error">Đăng nhập thất bại. Vui lòng thử lại.</div>
+    <% } %>
+
+    <!-- Nút đăng nhập duy nhất → redirect sang Keycloak -->
+    <a href="/auth/login" class="btn-primary">Đăng nhập</a>
+
+    <p class="hero-hint">Chưa có tài khoản? <span>Liên hệ quản trị viên</span></p>
+  </div>
+
+  <!-- Feature badges -->
+  <div class="feature-row">
+    <div class="feature-badge">
+      <span class="badge-icon">🔒</span>
+      <div class="badge-label">SSO / OAuth</div>
+      <div class="badge-sub">Google &amp; GitHub</div>
+    </div>
+    <div class="feature-badge">
+      <span class="badge-icon">🛡️</span>
+      <div class="badge-label">2FA / MFA</div>
+      <div class="badge-sub">OTP + Passkey</div>
+    </div>
+    <div class="feature-badge">
+      <span class="badge-icon">👥</span>
+      <div class="badge-label">RBAC</div>
+      <div class="badge-sub">Phân quyền vai trò</div>
+    </div>
+  </div>
+
+  <p class="powered">Powered by Keycloak · Bảo mật cấp doanh nghiệp</p>
 </div>

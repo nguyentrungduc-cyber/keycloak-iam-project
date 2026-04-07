@@ -36,6 +36,11 @@ body {
   padding: 24px 16px;
 }
 
+/* Xóa sổ mọi loại Header mặc định của Keycloak (Chữ uit-keycloak-realm) */
+#kc-header, .login-pf-header, header {
+    display: none !important;
+}
+
 /* ── Card ── */
 .kc-card {
   background: var(--bg-card);
@@ -44,23 +49,27 @@ body {
   padding: 36px 32px;
   width: 100%;
   max-width: 440px;
+  margin: 0 auto;
 }
 
-/* ── Logo + header ── */
-.kc-header {
+/* ── Bọc Logo + Header ở bên trong form ── */
+.kc-header-inside {
   text-align: center;
   margin-bottom: 28px;
 }
+
+/* ── Logo ── */
 .kc-logo {
   width: 52px; height: 52px;
-  background: var(--accent);
-  border-radius: 14px;
+  background: #1e3a8a;
+  border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 14px;
 }
 .kc-logo svg { display: block; }
+
 .kc-title {
   font-size: 20px;
   font-weight: 700;
@@ -108,18 +117,21 @@ body {
 .kc-btn-primary {
   display: block;
   width: 100%;
-  background: var(--accent);
+  background: #2a2a2a;
   color: #fff;
-  border: none;
+  border: 1px solid #444;
   border-radius: var(--radius-btn);
   padding: 13px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   margin-top: 6px;
-  transition: background .2s;
+  transition: background .2s, border-color .2s;
 }
-.kc-btn-primary:hover { background: var(--accent-hover); }
+.kc-btn-primary:hover { 
+  background: #333; 
+  border-color: #555;
+}
 
 .kc-btn-social {
   display: flex;
@@ -137,6 +149,7 @@ body {
   cursor: pointer;
   text-decoration: none;
   transition: border-color .2s, background .2s;
+  margin-bottom: 8px;
 }
 .kc-btn-social:hover { background: #2a2a2a; border-color: #555; }
 .kc-btn-social svg { flex-shrink: 0; }
@@ -161,30 +174,7 @@ body {
   white-space: nowrap;
 }
 
-/* ── Alert messages ── */
-.kc-alert {
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 13px;
-  margin-bottom: 14px;
-}
-.kc-alert-error {
-  background: #2a0d0d;
-  border: 0.5px solid #5a1a1a;
-  color: var(--red);
-}
-.kc-alert-success {
-  background: #0d2818;
-  border: 0.5px solid #1a4d2e;
-  color: var(--green);
-}
-.kc-alert-info {
-  background: #0d1a2e;
-  border: 0.5px solid #1a3a5a;
-  color: #60a5fa;
-}
-
-/* ── Footer links ── */
+/* ── Footer links & Utilities ── */
 .kc-footer {
   text-align: center;
   margin-top: 18px;
@@ -197,51 +187,20 @@ body {
 }
 .kc-footer a:hover { text-decoration: underline; }
 
-/* ── Password strength bar ── */
-.kc-strength-wrap {
-  margin-top: 6px;
-}
-.kc-strength-bar {
-  height: 3px;
-  border-radius: 2px;
-  background: #333;
-  overflow: hidden;
-  margin-bottom: 3px;
-}
-.kc-strength-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: 2px;
-  transition: width .3s, background .3s;
-}
-.kc-strength-text {
-  font-size: 11px;
-  color: var(--text-hint);
-}
+/* ── Các phần bổ trợ khác giữ nguyên ── */
+.kc-alert { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 14px; }
+.kc-alert-error { background: #2a0d0d; border: 0.5px solid #5a1a1a; color: var(--red); }
+.kc-alert-success { background: #0d2818; border: 0.5px solid #1a4d2e; color: var(--green); }
+.kc-alert-info { background: #0d1a2e; border: 0.5px solid #1a3a5a; color: #60a5fa; }
 
-/* ── Step indicator (quên mật khẩu) ── */
-.kc-steps {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 22px;
-}
-.kc-step-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #333;
-  transition: background .3s;
-}
+.kc-strength-wrap { margin-top: 6px; }
+.kc-strength-bar { height: 3px; border-radius: 2px; background: #333; overflow: hidden; margin-bottom: 3px; }
+.kc-strength-fill { height: 100%; width: 0%; border-radius: 2px; transition: width .3s, background .3s; }
+.kc-strength-text { font-size: 11px; color: var(--text-hint); }
+
+.kc-steps { display: flex; justify-content: center; align-items: center; gap: 6px; margin-bottom: 22px; }
+.kc-step-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; transition: background .3s; }
 .kc-step-dot.active { background: var(--accent); }
-
-/* ── Powered by ── */
-.kc-powered {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 11px;
-  color: #444;
-}
 
 @media (max-width: 480px) {
   .kc-card { padding: 28px 20px; }

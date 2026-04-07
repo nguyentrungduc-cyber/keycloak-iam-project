@@ -1,96 +1,46 @@
 <#import "template.ftl" as layout>
-
-<@layout.registrationLayout displayInfo=social.displayInfo displayWide=(realm.password && social.providers??); section>
-
+<@layout.registrationLayout displayMessage=true displayInfo=false; section>
     <#if section = "header">
-        ${msg("loginAccountTitle")}
-
-    <#elseif section = "form">
-
-        <div id="kc-form">
-            <div style="text-align:center; margin-bottom: 24px;">
-                <div style="width:48px;height:48px;background:#1F3B6E;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;">
-                    <div style="width:24px;height:24px;border:3px solid #fff;border-radius:50%;"></div>
+        <#elseif section = "form">
+        <div class="kc-card">
+            
+            <div class="kc-header-inside">
+                <div class="kc-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/>
+                    </svg>
                 </div>
-                <h2 style="margin:12px 0 4px; font-size:20px;">Đăng nhập MyApp</h2>
-                <p style="color:#888; font-size:13px; margin:0;">Nhập thông tin tài khoản của bạn</p>
+                <div class="kc-title">Đăng nhập</div>
+                <div class="kc-subtitle">MyApp — Powered by KeyCloak</div>
             </div>
 
-            <div id="kc-form-wrapper">
-                <#if realm.password>
-                    <form id="kc-form-login" onsubmit="login.disabled = true; return true;"
-                          action="${url.loginAction}" method="post">
+            <form id="kc-form-login" action="${url.loginAction}" method="post">
+                <div class="kc-form-group">
+                    <label for="username">Email</label>
+                    <input id="username" name="username" value="${(login.username!'')}" type="text" autofocus placeholder="nguyenvana@example.com" />
+                </div>
 
-                        <div style="margin-bottom:14px;">
-                            <label for="username" style="display:block;font-size:13px;color:#555;margin-bottom:5px;">
-                                <#if !realm.loginWithEmailAllowed>
-                                    ${msg("username")}
-                                <#elseif !realm.registrationEmailAsUsername>
-                                    ${msg("usernameOrEmail")}
-                                <#else>
-                                    ${msg("email")}
-                                </#if>
-                            </label>
-                            <input id="username" name="username" type="text"
-                                   value="${(login.username!'')}"
-                                   style="width:100%;height:38px;border:1px solid #ddd;border-radius:6px;padding:0 10px;font-size:14px;box-sizing:border-box;"
-                                   autofocus autocomplete="username" />
-                        </div>
+                <div class="kc-form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input id="password" name="password" type="password" placeholder="••••••••••" />
+                </div>
 
-                        <div style="margin-bottom:20px;">
-                            <label for="password" style="display:block;font-size:13px;color:#555;margin-bottom:5px;">
-                                ${msg("password")}
-                            </label>
-                            <input id="password" name="password" type="password"
-                                   style="width:100%;height:38px;border:1px solid #ddd;border-radius:6px;padding:0 10px;font-size:14px;box-sizing:border-box;"
-                                   autocomplete="current-password" />
-                        </div>
+                <button class="kc-btn-primary" name="login" id="kc-login" type="submit">Đăng nhập</button>
+            </form>
 
-                        <input type="hidden" id="id-hidden-input" name="credentialId"
-                               <#if auth.selectedCredential?has_content>value="${auth.selectedCredential}"</#if>/>
-
-                        <button type="submit" id="kc-login"
-                                style="width:100%;height:40px;background:#1F3B6E;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;">
-                            ${msg("doLogIn")}
-                        </button>
-
-                        <#if realm.resetPasswordAllowed>
-                            <div style="text-align:center;margin-top:12px;">
-                                <a href="${url.loginResetCredentialsUrl}"
-                                   style="font-size:12px;color:#888;">
-                                    ${msg("doForgotPassword")}
-                                </a>
-                            </div>
-                        </#if>
-                    </form>
-                </#if>
+            <div class="kc-divider"><span>hoặc tiếp tục với</span></div>
+            <div class="kc-social-providers">
+                <a href="#" class="kc-btn-social">
+                    <span style="color: #ef4444; font-size: 16px; margin-right: 6px;">●</span> Đăng nhập bằng Google
+                </a>
+                <a href="#" class="kc-btn-social">
+                    <span style="color: #334155; font-size: 16px; margin-right: 6px;">●</span> Đăng nhập bằng GitHub
+                </a>
             </div>
 
-            <#if social.providers??>
-                <div style="display:flex;align-items:center;gap:10px;margin:20px 0;">
-                    <div style="flex:1;height:1px;background:#eee;"></div>
-                    <span style="font-size:12px;color:#aaa;">hoặc tiếp tục với</span>
-                    <div style="flex:1;height:1px;background:#eee;"></div>
-                </div>
-
-                <div>
-                    <#list social.providers as p>
-                        <a href="${p.loginUrl}"
-                           style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:38px;border:1px solid #ddd;border-radius:6px;text-decoration:none;color:#333;font-size:13px;margin-bottom:10px;box-sizing:border-box;">
-                            ${p.displayName}
-                        </a>
-                    </#list>
-                </div>
-            </#if>
-
-            <#if realm.password && realm.registrationAllowed && !registrationDisabled??>
-                <div style="text-align:center;margin-top:16px;font-size:12px;color:#888;">
-                    Chưa có tài khoản?
-                    <a href="${url.registrationUrl}" style="color:#1F3B6E;">Đăng ký ngay</a>
-                </div>
-            </#if>
+            <div class="kc-footer">
+                Chưa có tài khoản? <a href="${url.registrationUrl}">Đăng ký ngay</a>
+            </div>
         </div>
-
     </#if>
-
 </@layout.registrationLayout>

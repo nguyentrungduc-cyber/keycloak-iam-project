@@ -17,6 +17,7 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Đạt thêm
 // THÊM 2 DÒNG NÀY ĐỂ RENDER UI:
 app.set('view engine', 'ejs'); // Báo cho Node.js biết là dùng EJS
 
@@ -24,6 +25,7 @@ const expressLayouts = require('express-ejs-layouts');
 app.use(expressLayouts);
 
 app.use(express.static('public')); // Mở thư mục 'public' để đọc file style.css
+// Đạt thêm xong
 
 // ── Khởi động: kết nối với KeyCloak và lấy config OIDC ────────────
 async function startServer() {
@@ -45,14 +47,17 @@ async function startServer() {
     app.locals.oidcClient = client;
 
     // ── Routes ──────────────────────────────────────────────────────
-    // 1. Dùng dấu // để "phong ấn" (tắt) 2 cái dòng gây lỗi này đi:
+
+    // Đạt thêm
+    // Dùng dấu // để "phong ấn" (tắt) 2 cái dòng gây lỗi (code ban đầu là k // 2 dòng này):
     // app.use('/', require('./routes/auth'));
     // app.use('/', require('./routes/protected'));
 
-    // 2. Thêm 3 dòng này để bật thẳng cái Landing Page của Đạt lên:
+    // Thêm 3 dòng này để bật thẳng cái Landing Page:
     app.get('/', (req, res) => {
       res.render('landing'); 
     });
+    // Đạt thêm xong
 
     app.listen(PORT, () => {
       console.log(`Client App đang chạy tại: http://localhost:${PORT}`);

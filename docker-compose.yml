@@ -66,6 +66,29 @@ services:
     networks:
       - keycloak-net # Kết nối cùng network với postgres
 
+  # ── MyApp (Node.js/EJS) ─────────────────────────────────
+  myapp:
+    build: ./myapp             # Đường dẫn tới thư mục chứa Dockerfile vừa tạo
+    container_name: myapp-server
+    ports:
+      - "${APP_PORT:-3000}:3000" # Sử dụng APP_PORT từ file .env
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - KC_SERVER_URL=${KC_SERVER_URL}
+      - KC_REALM=${KC_REALM}
+      - KC_CLIENT_ID=${KC_CLIENT_ID}
+      - KC_CLIENT_SECRET=${KC_CLIENT_SECRET}
+      - SESSION_SECRET=${SESSION_SECRET}
+    volumes:
+      - ./myapp:/usr/src/app   # Đồng bộ code: Sửa file .ejs bên ngoài là trong container đổi luôn
+      - /usr/src/app/node_modules # Giữ lại node_modules bên trong container
+    networks:
+      - keycloak-net
+    depends_on:
+      keycloak:
+        condition: service_started # MyApp sẽ đợi Keycloak khởi động trước
+
 volumes:
   postgres_data:
   # Volume lưu data PostgreSQL (persistent)

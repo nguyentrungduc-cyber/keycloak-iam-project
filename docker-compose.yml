@@ -55,6 +55,8 @@ services:
       # Bind mount file config từ máy host vào container
       # Cho phép chỉnh config mà không cần rebuild image
 
+      - ./keycloak/themes:/opt/keycloak/themes
+
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,10 +1,15 @@
 /* Thiết lập biến màu sắc (Style Guide) để dùng chung cho cả Keycloak sau này */
 :root {
-    --bg-dark: #0f172a;        /* Nền tối */
-    --text-light: #f8fafc;     /* Chữ trắng */
-    --text-muted: #94a3b8;     /* Chữ xám nhạt (cho chú thích) */
-    --primary-color: #6366f1;  /* Xanh Indigo chủ đạo */
-    --primary-hover: #4f46e5;  /* Xanh Indigo đậm khi hover chuột */
+    /* Đã cập nhật mã màu, ép về Xám Đen chuẩn, triệt tiêu ánh xanh */
+    --bg-dark:      #0a0a0a;    /* Nền trang web ngoài cùng (Đen) */
+    --bg-container: #161616;    /* Nền của cái khung bự (Xám tối) */
+    --bg-card:      #222222;    /* Nền hộp nội dung (Xám than chuẩn mực) */
+    --border-color: #333333;    /* Màu viền xám tro */
+    
+    --text-light:   #f0f0f0;    /* Chữ trắng sáng */
+    --text-muted:   #888888;    /* Chữ xám nhạt */
+    --primary-color: #2563eb;   /* Xanh Blue chủ đạo của Đạt */
+    --primary-hover: #1d4ed8;   /* Xanh đậm khi hover */
     --font-main: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -23,30 +28,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    text-align: center;
+    min-height: 100vh;
+    padding: 40px 16px; /* Cách lề trên dưới 40px tránh sát viền */
 }
 
-.landing-container {
-    padding: 40px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.03); /* Hiệu ứng kính mờ nhẹ */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-}
-
-.landing-container h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-}
-
-.landing-container p {
-    color: var(--text-muted);
-    margin-bottom: 30px;
-    font-size: 1.1rem;
-}
-
-/* Nút bấm siêu ngầu */
+/* Nút bấm */
 .btn-primary {
     background-color: var(--primary-color);
     color: white;
@@ -64,4 +50,194 @@ body {
 .btn-primary:hover {
     background-color: var(--primary-hover);
     transform: translateY(-2px); /* Hiệu ứng nảy lên nhẹ */
+}
+
+/* ═══════════════════════════════════════════════
+    LANDING PAGE (ĐÃ TINH CHỈNH MÀU & KÍCH THƯỚC)
+════════════════════════════════════════════════ */
+.landing-container {
+  background-color: var(--bg-container);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 28px;
+  width: 100%;
+  max-width: 460px; /* Khống chế bề ngang cho thon gọn */
+  gap: 20px;
+}
+
+.landing-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  width: 100%;
+}
+
+.logo-wrap {
+  width: 36px; height: 36px;
+  background: #1e3a8a; /* Vẫn giữ đúng màu Xanh Navy cho Logo */
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo-wrap.small { width: 28px; height: 28px; border-radius: 7px; }
+
+.app-name { font-size: 16px; font-weight: 600; color: var(--text-light); }
+
+/* ── KHUNG CARD CHÍNH ── */
+.hero-card {
+  background: var(--bg-card); /* Nền xám đen chuẩn */
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 28px 32px;
+  width: 100%;
+  text-align: center;
+}
+
+.hero-card .logo-wrap {
+  margin: 0 auto 16px auto;
+}
+
+.hero-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.hero-sub   { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
+.hero-hint  { font-size: 12px; color: #777777; margin-top: 16px; }
+.hero-hint a { color: #60a5fa; text-decoration: none; cursor: pointer; transition: color 0.2s; }
+.hero-hint a:hover { text-decoration: underline; color: #93c5fd; }
+
+.btn-primary {
+  display: block; width: 100%;
+  background: var(--primary-color); color: #fff;
+  border: none; border-radius: 10px;
+  padding: 12px; font-size: 14px; font-weight: 600;
+  text-decoration: none; text-align: center;
+  cursor: pointer; transition: background .2s;
+}
+.btn-primary:hover { background: var(--primary-hover); }
+
+/* Cảnh báo (Giữ nguyên của Đạt) */
+.alert { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 14px; }
+.alert-error { background: #2a0d0d; border: 0.5px solid #5a1a1a; color: #ef4444; }
+
+/* ── 3 KHUNG TÍNH NĂNG NHỎ ── */
+.feature-row {
+  display: flex; gap: 10px;
+  width: 100%;
+}
+.feature-badge {
+  flex: 1; 
+  background: var(--bg-card); /* Nền xám đen chuẩn */
+  border: 1px solid var(--border-color);
+  border-radius: 10px; 
+  padding: 12px 10px;
+  text-align: center;
+}
+.badge-icon  { font-size: 20px; display: block; margin-bottom: 4px; }
+.badge-label { font-size: 11px; font-weight: 600; color: #f0f0f0; }
+.badge-sub   { font-size: 10px; color: #777777; margin-top: 2px; }
+
+.powered { font-size: 11px; color: #555555; }
+
+
+/* ═══════════════════════════════════════════════
+    DASHBOARD (GIỮ NGUYÊN CODE GỐC CỦA ĐẠT 100%)
+════════════════════════════════════════════════ */
+.dashboard-wrap {
+  min-height: 100vh; width: 100%;
+  display: flex; flex-direction: column;
+  align-items: stretch; padding: 0;
+  text-align: left;
+}
+
+.dash-topbar {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  background: #1e293b;
+  border-bottom: 0.5px solid #334155;
+  padding: 14px 28px;
+}
+
+.dash-brand { display: flex; align-items: center; gap: 10px; }
+
+.dash-user  { display: flex; align-items: center; gap: 12px; }
+.avatar-circle {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #334155; color: #94a3b8;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 13px;
+}
+.user-name { font-size: 14px; color: var(--text-light); }
+
+.btn-logout {
+  background: transparent; border: 0.5px solid #475569;
+  border-radius: 8px; padding: 7px 16px;
+  font-size: 13px; font-weight: 600; color: var(--text-light);
+  cursor: pointer; text-decoration: none;
+  transition: background .2s;
+}
+.btn-logout:hover { background: #334155; }
+
+.stat-row {
+  display: flex; gap: 14px;
+  padding: 20px 28px 0;
+}
+.stat-card {
+  flex: 1; background: #1e293b;
+  border: 0.5px solid #334155;
+  border-radius: 10px; padding: 16px 18px;
+}
+.stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.stat-value { font-size: 18px; font-weight: 600; color: var(--text-light); }
+
+.dash-panels {
+  display: flex; gap: 14px;
+  padding: 14px 28px 28px;
+  flex: 1;
+}
+.panel {
+  flex: 1; background: #1e293b;
+  border: 0.5px solid #334155;
+  border-radius: 12px; padding: 20px;
+}
+.panel-title {
+  font-size: 14px; font-weight: 600;
+  color: var(--text-light); margin-bottom: 12px;
+}
+
+.code-block {
+  background: #0f172a; border: 0.5px solid #334155;
+  border-radius: 8px; padding: 14px;
+  font-size: 12px; color: #7dd3fc;
+  overflow-x: auto; line-height: 1.7;
+  font-family: 'Fira Code', monospace;
+}
+
+.roles-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.role-badge {
+  background: #1e3a5f; border: 0.5px solid #2563eb;
+  border-radius: 20px; padding: 4px 14px;
+  font-size: 12px; color: #93c5fd;
+}
+
+.rbac-list { display: flex; flex-direction: column; gap: 4px; }
+.rbac-row  {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 0.5px solid #1e293b;
+}
+.rbac-label { font-size: 13px; color: var(--text-light); }
+.rbac-badge {
+  font-size: 12px; font-weight: 600;
+  border-radius: 6px; padding: 3px 12px;
+}
+.rbac-badge.allow { background: #14532d; color: #4ade80; }
+.rbac-badge.deny  { background: #450a0a; color: #f87171; }
+
+@media (max-width: 700px) {
+  .stat-row, .dash-panels { flex-direction: column; }
+  .dash-topbar { padding: 12px 16px; }
+  .stat-row, .dash-panels { padding-left: 16px; padding-right: 16px; }
 }

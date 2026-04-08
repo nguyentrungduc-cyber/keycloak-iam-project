@@ -48,7 +48,7 @@ body {
   border-radius: var(--radius-card);
   padding: 36px 32px;
   width: 100%;
-  max-width: 440px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -62,7 +62,7 @@ body {
 .kc-logo {
   width: 52px; height: 52px;
   background: #1e3a8a;
-  border-radius: 50%;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -205,4 +205,20 @@ body {
 @media (max-width: 480px) {
   .kc-card { padding: 28px 20px; }
   .kc-form-group .input-row { grid-template-columns: 1fr; }
+}
+
+/* Đổi màu link sang xanh nhạt (#60a5fa) giống Landing Page */
+.kc-footer a,
+.kc-footer a:link,
+.kc-footer a:visited,
+.kc-footer a:active {
+    color: #60a5fa !important;
+    text-decoration: none !important;
+    transition: color 0.2s;
+}
+
+/* Hiệu ứng khi rê chuột vào */
+.kc-footer a:hover {
+    color: #93c5fd !important;
+    text-decoration: underline !important;
 }

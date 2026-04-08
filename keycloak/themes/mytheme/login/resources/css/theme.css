@@ -1,190 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
 /* =========================================================
-   MyApp — Keycloak Login Theme CSS
-   File: keycloak/themes/my-theme/login/css/theme.css
+   MyApp — Keycloak Login Theme CSS (Bản chuẩn theo Design)
    ========================================================= */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
-}
-
 body {
-  background: #161616;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  background: #161616 !important;
+  /* Trả lại nền đen nhám chuẩn design */
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
   color: #f0f0f0;
 }
 
-.container {
-  width: 100%;
-  max-width: 440px;
+/* ── Mở rộng khung đăng nhập & ghi đè class mặc định Keycloak ── */
+.login-pf-page .card-pf,
+.card,
+#kc-form-wrapper {
+  width: 100% !important;
+  max-width: 440px !important;
+  /* Độ rộng chuẩn */
+  background: #222222 !important;
+  border: 1px solid #333333 !important;
+  border-radius: 14px !important;
+  padding: 40px 36px !important;
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.4) !important;
   margin: 0 auto;
-}
-
-.card {
-  background: #222222;
-  border: 0.5px solid #333333;
-  border-radius: 14px;
-  padding: 36px 32px;
-  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
-}
-
-/* ── Alert messages ── */
-.kc-alert {
-  border-radius: 8px;
-  padding: 12px 14px;
-  font-size: 13px;
-  margin-bottom: 16px;
-  animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.kc-alert-error {
-  background: #2a0d0d;
-  border: 0.5px solid #5a1a1a;
-  color: #ef4444;
-}
-
-.kc-alert-success {
-  background: #0d2818;
-  border: 0.5px solid #1a4d2e;
-  color: #4ade80;
-}
-
-.kc-alert-warning {
-  background: #2a1a0d;
-  border: 0.5px solid #5a3a1a;
-  color: #f97316;
-}
-
-.kc-alert-info {
-  background: #0d1a2e;
-  border: 0.5px solid #1a3a5a;
-  color: #60a5fa;
-}
-
-.kc-feedback-text {
-  display: block;
-  word-break: break-word;
 }
 
 /* ── Header ── */
 .header {
   text-align: center;
   margin-bottom: 24px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #f0f0f0;
-}
-
-/* ── Form content ── */
-.form-content {
-  margin: 0;
-}
-
-#kc-form {
-  display: flex;
-  flex-direction: column;
 }
 
 /* ── Form inputs ── */
 input[type="text"],
 input[type="email"],
-input[type="password"],
-input[type="url"],
-input[type="number"] {
+input[type="password"] {
   width: 100%;
-  background: #1a1a1a;
-  border: 0.5px solid #333333;
-  border-radius: 8px;
-  padding: 11px 14px;
+  padding: 12px 16px;
+  background: #1a1a1a !important;
+  border: 1px solid #333333 !important;
+  border-radius: 8px !important;
   font-size: 14px;
-  color: #f0f0f0;
+  color: #f0f0f0 !important;
   outline: none;
   transition: border-color 0.2s ease;
+  margin-top: 6px;
   font-family: inherit;
 }
 
 input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="url"]:focus,
-input[type="number"]:focus {
-  border-color: #2563eb;
-  background: #1a1a1a;
+input[type="password"]:focus {
+  border-color: #555555 !important;
+  background: #1a1a1a !important;
 }
 
-input[type="text"]::placeholder,
-input[type="email"]::placeholder,
-input[type="password"]::placeholder {
-  color: #666666;
+/* 🔥 FIX LỖI AUTOFILL CỦA CHROME/EDGE LÀM Ô INPUT BỊ TRẮNG 🔥 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
+  -webkit-text-fill-color: #f0f0f0 !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 label {
   display: block;
-  font-size: 12px;
+  font-size: 13px;
   color: #aaaaaa;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   font-weight: 500;
+  text-align: left;
 }
 
-/* ── Submit button ── */
+/* ── Nút Đăng nhập chính (Màu tối theo design) ── */
 input[type="submit"],
 button[type="submit"],
 #kc-login {
   display: block;
   width: 100%;
-  background: #2563eb;
+  background: transparent !important;
   color: #ffffff;
-  border: none;
-  border-radius: 10px;
-  padding: 13px 16px;
+  border: 1px solid #444444 !important;
+  border-radius: 8px;
+  padding: 12px 16px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
-  margin-top: 4px;
+  margin-top: 12px;
   font-family: inherit;
 }
 
-input[type="submit"]:hover,
-button[type="submit"]:hover,
 #kc-login:hover {
-  background: #1d4ed8;
+  background: #2a2a2a !important;
+  border-color: #555555 !important;
 }
 
-input[type="submit"]:active,
-button[type="submit"]:active,
-#kc-login:active {
-  background: #1e40af;
-  transform: scale(0.98);
+/* ── Nút Social Login (Google/Github) ── */
+#kc-social-providers .zocial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: transparent !important;
+  border: 1px solid #444444 !important;
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: #dddddd;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: background 0.2s ease;
 }
 
-input[type="submit"]:disabled,
-button[type="submit"]:disabled,
-#kc-login:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+#kc-social-providers .zocial:hover {
+  background: #2a2a2a !important;
 }
 
 /* ── Links ── */
@@ -195,80 +140,17 @@ a {
 }
 
 a:hover {
-  color: #93c5fd;
   text-decoration: underline;
 }
 
-/* ── Social login buttons ── */
-#kc-social-providers .zocial,
-.pf-c-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  background: transparent;
-  border: 0.5px solid #333333;
-  border-radius: 8px;
-  padding: 11px 14px;
-  color: #dddddd;
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-  margin-bottom: 8px;
-  transition: background 0.2s ease, border-color 0.2s ease;
-  cursor: pointer;
-  font-family: inherit;
+/* ── Utilities ── */
+.kc-divider {
+  margin: 24px 0;
 }
 
-#kc-social-providers .zocial:hover,
-.pf-c-button:hover {
-  background: #2a2a2a;
-  border-color: #444444;
-}
-
-/* ── Divider ── */
-.kc-divider,
-hr {
-  border: none;
-  border-top: 0.5px solid #333333;
-  margin: 18px 0;
-}
-
-/* ── Footer info ── */
 .footer-info {
   text-align: center;
-  margin-top: 16px;
-  font-size: 12px;
+  margin-top: 20px;
+  font-size: 13px;
   color: #555555;
-  padding: 16px 0 0 0;
-  border-top: 0.5px solid #333333;
-}
-
-/* ── Responsive design ── */
-@media (max-width: 480px) {
-  .card {
-    padding: 28px 20px;
-  }
-
-  .container {
-    max-width: 100%;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  button[type="submit"] {
-    font-size: 16px;
-  }
-}
-
-/* ── Utility classes ── */
-.hidden {
-  display: none !important;
-}
-
-.error-text {
-  color: #ef4444;
-  font-size: 12px;
-  margin-top: 4px;
 }

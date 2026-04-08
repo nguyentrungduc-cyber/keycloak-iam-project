@@ -55,7 +55,8 @@ services:
       # Bind mount file config từ máy host vào container
       # Cho phép chỉnh config mà không cần rebuild image
 
-      - ./themes/mytheme:/opt/keycloak/themes/mytheme
+      #- ./themes/mytheme:/opt/keycloak/themes/mytheme
+      - ./keycloak/themes:/opt/keycloak/themes
       # Mount toàn bộ thư mục themes vào Keycloak
       # Keycloak sẽ tự nhận theme mới mà không cần rebuild image
 

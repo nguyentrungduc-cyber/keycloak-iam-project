@@ -59,7 +59,7 @@ Vào Admin Console → Create realm → Import file `keycloak/realm-export.json`
 ### 5. Chạy Client App
 
 ```bash
-cd client-app
+cd myapp
 npm install
 npm start
 ```

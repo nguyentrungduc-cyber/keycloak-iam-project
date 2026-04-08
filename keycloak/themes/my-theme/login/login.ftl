@@ -1,7 +1,7 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayMessage=true displayInfo=false; section>
     <#if section = "header">
-        <#elseif section = "form">
+    <#elseif section = "form">
         <div class="kc-card">
             
             <div class="kc-header-inside">
@@ -23,6 +23,12 @@
                 <div class="kc-form-group">
                     <label for="password">Mật khẩu</label>
                     <input id="password" name="password" type="password" placeholder="••••••••••" />
+                    
+                    <#if realm.resetPasswordAllowed>
+                        <div class="kc-forgot-password-wrapper">
+                            <a href="${url.loginResetCredentialsUrl}">Quên mật khẩu?</a>
+                        </div>
+                    </#if>
                 </div>
 
                 <button class="kc-btn-primary" name="login" id="kc-login" type="submit">Đăng nhập</button>
@@ -30,6 +36,7 @@
 
             <div class="kc-divider"><span>hoặc tiếp tục với</span></div>
             <div class="kc-social-providers">
+                <#-- Lưu ý: Sau này Thành viên 3 sẽ config link thật ở đây nhé [cite: 94, 95] -->
                 <a href="#" class="kc-btn-social">
                     <span style="color: #ef4444; font-size: 16px; margin-right: 6px;">●</span> Đăng nhập bằng Google
                 </a>

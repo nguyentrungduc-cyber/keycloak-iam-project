@@ -3,27 +3,42 @@
    Dùng chung cho: login, register, reset-password, update-password
    ========================================================= */
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── 1. RESET & CẤU HÌNH CHUNG ── */
+*, *::before, *::after { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
 
 :root {
-  --bg-page:    #161616;
-  --bg-card:    #222222;
-  --bg-input:   #1a1a1a;
-  --border:     #333333;
-  --border-focus: #2563eb;
-  --accent:     #2563eb;
+  /* Hệ màu nền (Dark Theme) */
+  --bg-page:      #161616; /* Nền ngoài cùng */
+  --bg-card:      #222222; /* Nền hộp nội dung */
+  --bg-input:     #1a1a1a; /* Nền ô nhập liệu */
+  
+  /* Hệ màu tương tác & Viền */
+  --border:       #333333;
+  --border-focus: #2563eb; /* Màu xanh khi nhấp chuột vào ô input */
+  --accent:       #2563eb; /* Màu chủ đạo (Xanh Blue) */
   --accent-hover: #1d4ed8;
-  --text-primary:   #f0f0f0;
-  --text-secondary: #888888;
-  --text-hint:      #555555;
-  --text-link:      #60a5fa;
+  
+  /* Hệ màu chữ */
+  --text-primary:   #f0f0f0; /* Chữ chính trắng sáng */
+  --text-secondary: #888888; /* Chữ phụ xám */
+  --text-hint:      #555555; /* Chữ gợi ý mờ */
+  --text-link:      #60a5fa; /* Màu xanh nhạt cho Link (Đã đồng bộ Landing Page) */
+  
+  /* Trạng thái hệ thống */
   --red:   #ef4444;
   --green: #4ade80;
+  
+  /* Thông số bo góc */
   --radius-card:  12px;
   --radius-input: 8px;
   --radius-btn:   10px;
 }
 
+/* ── 2. BỐ CỤC TRANG (LAYOUT) ── */
 body {
   background: var(--bg-page);
   color: var(--text-primary);
@@ -36,29 +51,29 @@ body {
   padding: 24px 16px;
 }
 
-/* Xóa sổ mọi loại Header mặc định của Keycloak (Chữ uit-keycloak-realm) */
+/* Ẩn Header mặc định của Keycloak để dùng Header tùy chỉnh bên trong Card */
 #kc-header, .login-pf-header, header {
     display: none !important;
 }
 
-/* ── Card ── */
+/* ── 3. KHUNG NỘI DUNG CHÍNH (CARD) ── */
 .kc-card {
   background: var(--bg-card);
   border: 0.5px solid var(--border);
   border-radius: var(--radius-card);
   padding: 36px 32px;
   width: 100%;
-  max-width: 600px;
+  max-width: 440px;
   margin: 0 auto;
 }
 
-/* ── Bọc Logo + Header ở bên trong form ── */
+/* Phần nhận diện thương hiệu bên trong Card */
 .kc-header-inside {
   text-align: center;
   margin-bottom: 28px;
 }
 
-/* ── Logo ── */
+/* Logo MyApp - Hình tròn Navy */
 .kc-logo {
   width: 52px; height: 52px;
   background: #1e3a8a;
@@ -81,7 +96,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* ── Form fields ── */
+/* ── 4. THÀNH PHẦN FORM (INPUTS) ── */
 .kc-form-group {
   margin-bottom: 14px;
 }
@@ -105,19 +120,23 @@ body {
   transition: border-color .2s;
 }
 .kc-form-group input:focus {
-  border-color: var(--border-focus);
+  border-color: var(--border-focus); /* Hiệu ứng sáng viền xanh khi nhập liệu */
 }
+
+/* Hỗ trợ chia cột cho First Name / Last Name trong trang Register */
 .kc-form-group .input-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
-/* ── Buttons ── */
+/* ── 5. NÚT BẤM (BUTTONS) ── */
+
+/* Nút bấm chính (Submit) */
 .kc-btn-primary {
   display: block;
   width: 100%;
-  background: #2a2a2a;
+  background: #2a2a2a; /* Màu xám đậm sang trọng */
   color: #fff;
   border: 1px solid #444;
   border-radius: var(--radius-btn);
@@ -133,6 +152,7 @@ body {
   border-color: #555;
 }
 
+/* Nút đăng nhập mạng xã hội (Google, GitHub) */
 .kc-btn-social {
   display: flex;
   align-items: center;
@@ -151,10 +171,14 @@ body {
   transition: border-color .2s, background .2s;
   margin-bottom: 8px;
 }
-.kc-btn-social:hover { background: #2a2a2a; border-color: #555; }
-.kc-btn-social svg { flex-shrink: 0; }
+.kc-btn-social:hover { 
+    background: #2a2a2a; 
+    border-color: #555; 
+}
 
-/* ── Divider ── */
+/* ── 6. CÁC THÀNH PHẦN PHỤ TRỢ ── */
+
+/* Đường gạch ngang "hoặc tiếp tục với" */
 .kc-divider {
   display: flex;
   align-items: center;
@@ -174,40 +198,15 @@ body {
   white-space: nowrap;
 }
 
-/* ── Footer links & Utilities ── */
+/* Chân trang (Link Đăng ký / Đăng nhập) */
 .kc-footer {
   text-align: center;
   margin-top: 18px;
   font-size: 12px;
   color: var(--text-hint);
 }
-.kc-footer a {
-  color: var(--text-link);
-  text-decoration: none;
-}
-.kc-footer a:hover { text-decoration: underline; }
 
-/* ── Các phần bổ trợ khác giữ nguyên ── */
-.kc-alert { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 14px; }
-.kc-alert-error { background: #2a0d0d; border: 0.5px solid #5a1a1a; color: var(--red); }
-.kc-alert-success { background: #0d2818; border: 0.5px solid #1a4d2e; color: var(--green); }
-.kc-alert-info { background: #0d1a2e; border: 0.5px solid #1a3a5a; color: #60a5fa; }
-
-.kc-strength-wrap { margin-top: 6px; }
-.kc-strength-bar { height: 3px; border-radius: 2px; background: #333; overflow: hidden; margin-bottom: 3px; }
-.kc-strength-fill { height: 100%; width: 0%; border-radius: 2px; transition: width .3s, background .3s; }
-.kc-strength-text { font-size: 11px; color: var(--text-hint); }
-
-.kc-steps { display: flex; justify-content: center; align-items: center; gap: 6px; margin-bottom: 22px; }
-.kc-step-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; transition: background .3s; }
-.kc-step-dot.active { background: var(--accent); }
-
-@media (max-width: 480px) {
-  .kc-card { padding: 28px 20px; }
-  .kc-form-group .input-row { grid-template-columns: 1fr; }
-}
-
-/* Đổi màu link sang xanh nhạt (#60a5fa) giống Landing Page */
+/* Ép màu link chân trang luôn là xanh nhạt đồng bộ (Fix lỗi xanh đậm mặc định) */
 .kc-footer a,
 .kc-footer a:link,
 .kc-footer a:visited,
@@ -216,9 +215,59 @@ body {
     text-decoration: none !important;
     transition: color 0.2s;
 }
-
-/* Hiệu ứng khi rê chuột vào */
-.kc-footer a:hover {
+.kc-footer a:hover { 
     color: #93c5fd !important;
+    text-decoration: underline !important; 
+}
+
+/* Hệ thống thông báo lỗi/thành công (Alerts) */
+.kc-alert { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 14px; }
+.kc-alert-error { background: #2a0d0d; border: 0.5px solid #5a1a1a; color: var(--red); }
+.kc-alert-success { background: #0d2818; border: 0.5px solid #1a4d2e; color: var(--green); }
+.kc-alert-info { background: #0d1a2e; border: 0.5px solid #1a3a5a; color: #60a5fa; }
+
+/* Thông báo lỗi đỏ nhạt trong trang Error/Info */
+.kc-error-message p {
+    background: rgba(239, 68, 68, 0.1);
+    border: 0.5px solid rgba(239, 68, 68, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    color: #f87171 !important;
+}
+
+/* Thanh độ mạnh mật khẩu (Password Strength) */
+.kc-strength-wrap { margin-top: 6px; }
+.kc-strength-bar { height: 3px; border-radius: 2px; background: #333; overflow: hidden; margin-bottom: 3px; }
+.kc-strength-fill { height: 100%; width: 0%; border-radius: 2px; transition: width .3s, background .3s; }
+.kc-strength-text { font-size: 11px; color: var(--text-hint); }
+
+/* Các chấm bước thực hiện (Step dots) */
+.kc-steps { display: flex; justify-content: center; align-items: center; gap: 6px; margin-bottom: 22px; }
+.kc-step-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; transition: background .3s; }
+.kc-step-dot.active { background: var(--accent); }
+
+/* ── 7. QUÊN MẬT KHẨU (FORGOT PASSWORD) ── */
+.kc-form-options {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: flex-end; /* Đẩy link sang phải theo bản thiết kế */
+}
+
+.kc-forgot-password-wrapper a {
+    color: #60a5fa !important; 
+    font-size: 13px !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+}
+
+/* Hiệu ứng rê chuột đồng bộ với link Đăng ký ngay */
+.kc-forgot-password-wrapper a:hover {
     text-decoration: underline !important;
+    color: #93c5fd !important;
+}
+
+/* ── 8. THIẾT BỊ DI ĐỘNG (RESPONSIVE) ── */
+@media (max-width: 480px) {
+  .kc-card { padding: 28px 20px; }
+  .kc-form-group .input-row { grid-template-columns: 1fr; } /* Chuyển sang 1 cột trên điện thoại */
 }

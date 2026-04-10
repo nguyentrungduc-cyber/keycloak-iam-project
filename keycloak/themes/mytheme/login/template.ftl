@@ -19,7 +19,11 @@
         <#-- Hiển thị thông báo động -->
         <#if displayMessage && message?has_content>
             <div style="padding:12px; border-radius:4px; margin-bottom:16px; background: ${(message.type == 'error')?string('#cf6679', '#03dac6')}; color: #000;">
-                ${message.summary}
+                <#if message.summary == "You should receive an email shortly with further instructions.">
+            Một email hướng dẫn đã được gửi đến bạn!
+        <#else>
+            ${message.summary}
+        </#if>
             </div>
         </#if>
 

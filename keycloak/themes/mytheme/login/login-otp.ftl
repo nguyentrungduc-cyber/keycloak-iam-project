@@ -7,45 +7,25 @@
         
         <style>
             .kc-totp-container { text-align: center; padding: 10px 0; }
-            
-            /* Icon bảo mật */
             .kc-totp-icon-wrap {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                width: 56px;
-                height: 56px;
-                background: rgba(79, 70, 229, 0.1);
-                border-radius: 16px;
-                margin-bottom: 20px;
+                display: inline-flex; align-items: center; justify-content: center;
+                width: 56px; height: 56px; background: rgba(79, 70, 229, 0.1);
+                border-radius: 16px; margin-bottom: 20px;
             }
-            
             .kc-title { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 8px; }
             .kc-subtitle { font-size: 14px; color: #888; margin-bottom: 24px; line-height: 1.5; }
-
-            /* Ô nhập OTP */
             .otp-input-group { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
             .otp-field {
-                width: 45px;
-                height: 55px;
-                background: #262626;
-                border: 1px solid #444;
-                border-radius: 8px;
-                color: #fff;
-                font-size: 24px;
-                font-weight: bold;
-                text-align: center;
-                outline: none;
-                transition: border-color 0.2s;
+                width: 45px; height: 55px; background: #262626; border: 1px solid #444;
+                border-radius: 8px; color: #fff; font-size: 24px; font-weight: bold;
+                text-align: center; outline: none; transition: border-color 0.2s;
             }
             .otp-field:focus { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
-
             .kc-btn-primary { 
                 width: 100%; padding: 12px; background: #262626; border: 1px solid #444; 
                 border-radius: 8px; color: #fff; font-weight: 500; cursor: pointer; margin-bottom: 16px;
             }
             .kc-btn-primary:hover { background: #333; }
-
             .otp-timer { font-size: 13px; color: #666; }
             #timer-count { color: #6366f1; font-weight: 600; }
         </style>
@@ -62,7 +42,6 @@
             <p class="kc-subtitle">Vui lòng nhập mã xác thực từ ứng dụng <strong>Google Authenticator</strong> của bạn.</p>
 
             <form id="kc-totp-login-form" action="${url.loginAction}" method="post">
-                <#-- Các ô nhập giả lập để người dùng gõ cho đẹp -->
                 <div class="otp-input-group">
                     <input type="text" class="otp-field" maxlength="1" pattern="\d*">
                     <input type="text" class="otp-field" maxlength="1" pattern="\d*">
@@ -72,8 +51,8 @@
                     <input type="text" class="otp-field" maxlength="1" pattern="\d*">
                 </div>
 
-                <#-- Input ẩn thực tế để gửi lên Keycloak -->
-                <input type="hidden" id="totp" name="totp" />
+                <#-- QUAN TRỌNG: Đổi name từ 'totp' thành 'otp' -->
+                <input type="hidden" id="otp" name="otp" />
 
                 <button type="submit" class="kc-btn-primary">Xác nhận</button>
                 
@@ -86,7 +65,8 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const inputs = document.querySelectorAll('.otp-field');
-                const hiddenInput = document.getElementById('totp');
+                // Sửa ID ở đây để khớp với input ẩn bên trên
+                const hiddenInput = document.getElementById('otp');
 
                 inputs.forEach((input, index) => {
                     input.addEventListener('input', (e) => {
@@ -102,13 +82,25 @@
                             inputs[index - 1].focus();
                         }
                     });
+                    
+                    // Thêm sự kiện paste cho tiện lợi
+                    input.addEventListener('paste', (e) => {
+                        e.preventDefault();
+                        const data = e.clipboardData.getData('text').slice(0, 6);
+                        if (!/^\d+$/.test(data)) return;
+                        
+                        data.split('').forEach((char, i) => {
+                            if (inputs[i]) inputs[i].value = char;
+                        });
+                        updateHiddenValue();
+                        inputs[Math.min(data.length, inputs.length - 1)].focus();
+                    });
                 });
 
                 function updateHiddenValue() {
                     hiddenInput.value = Array.from(inputs).map(i => i.value).join('');
                 }
 
-                // Bộ đếm ngược trang trí
                 let timeLeft = 30;
                 setInterval(() => {
                     timeLeft--;

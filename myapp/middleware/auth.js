@@ -1,8 +1,18 @@
 const protect = (req, res, next) => {
-  if (req.session?.tokenSet?.access_token) {
-    return next();
+  const tokenSet = req.session?.tokenSet;
+
+  if (!tokenSet?.access_token) {
+    return res.redirect('/auth/login');
   }
-  return res.redirect('/auth/login');
+
+  const expiresAt = Number(tokenSet.expires_at || 0);
+  const now = Math.floor(Date.now() / 1000);
+
+  if (!expiresAt || expiresAt <= now) {
+    return req.session.destroy(() => res.redirect('/auth/login'));
+  }
+
+  return next();
 };
 
 const hasRole = (role) => (req, res, next) => {

@@ -2,6 +2,20 @@ const express = require('express');
 const { generators } = require('openid-client');
 const router = express.Router();
 
+function decodeJwtPayload(jwt) {
+  if (!jwt || typeof jwt !== 'string') return null;
+
+  const parts = jwt.split('.');
+  if (parts.length < 2) return null;
+
+  try {
+    const payloadJson = Buffer.from(parts[1], 'base64url').toString('utf8');
+    return JSON.parse(payloadJson);
+  } catch (err) {
+    return null;
+  }
+}
+
 router.get('/login', (req, res) => {
   const client = req.app.locals.oidcClient;
   const redirectUri = req.app.locals.oidcRedirectUri;
@@ -48,6 +62,8 @@ router.get('/callback', async (req, res) => {
     );
 
     const claims = tokenSet.claims();
+    const accessTokenPayload = decodeJwtPayload(tokenSet.access_token);
+    const realmRoles = accessTokenPayload?.realm_access?.roles || [];
     req.session.tokenSet = {
       id_token: tokenSet.id_token,
       access_token: tokenSet.access_token,
@@ -58,7 +74,8 @@ router.get('/callback', async (req, res) => {
       session_state: tokenSet.session_state
     };
     req.session.user = claims;
-    req.session.roles = claims.realm_access?.roles || [];
+    req.session.accessTokenPayload = accessTokenPayload;
+    req.session.roles = realmRoles;
     delete req.session.oidc;
 
     return res.redirect('/dashboard');
@@ -78,6 +95,12 @@ router.get('/logout', (req, res) => {
       id_token_hint: idTokenHint
     });
     res.redirect(logoutUrl);
+  });
+});
+
+router.get('/session-expired', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/auth/login');
   });
 });
 

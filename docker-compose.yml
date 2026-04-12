@@ -70,12 +70,16 @@ services:
   myapp:
     build: ./myapp             # Đường dẫn tới thư mục chứa Dockerfile vừa tạo
     container_name: myapp-server
+    restart: on-failure
+    command: >
+      sh -c "until node -e \"fetch('http://keycloak:8080/realms/master/.well-known/openid-configuration').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\"; do
+      echo 'Waiting for Keycloak...'; sleep 2; done; npm start"
     ports:
       - "${APP_PORT:-3000}:3000" # Sử dụng APP_PORT từ file .env
     environment:
       - NODE_ENV=development
-      - PORT=3000
-      - KC_SERVER_URL=${KC_SERVER_URL}
+      - APP_PORT=3000
+      - KC_SERVER_URL=http://keycloak:8080
       - KC_REALM=${KC_REALM}
       - KC_CLIENT_ID=${KC_CLIENT_ID}
       - KC_CLIENT_SECRET=${KC_CLIENT_SECRET}
@@ -87,7 +91,7 @@ services:
       - keycloak-net
     depends_on:
       keycloak:
-        condition: service_started # MyApp sẽ đợi Keycloak khởi động trước
+        condition: service_started # MyApp sẽ đợi Keycloak start và tự chờ readiness trước khi npm start
 
 volumes:
   postgres_data:

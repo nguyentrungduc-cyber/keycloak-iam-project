@@ -1,10 +1,107 @@
-<%- include('layout') %>
-<div class="min-h-screen bg-gray-950 text-white p-8">
-  <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
-  <div class="bg-gray-900 p-6 rounded-2xl">
-    <p><strong>Xin chào:</strong> <%= user.preferred_username || user.name %></p>
-    <p><strong>Email:</strong> <%= user.email %></p>
-    <p><strong>Roles:</strong> <%= roles.join(', ') %></p>
-    <a href="/auth/logout" class="mt-6 inline-block bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl">Đăng xuất</a>
+<%
+  const displayName = user.name || user.preferred_username || 'Người dùng';
+  const firstChar = (displayName || 'U').trim().charAt(0).toUpperCase() || 'U';
+%>
+
+<div class="dashboard-wrap" data-expires-at="<%= expiresAt %>">
+  <div class="dash-topbar">
+    <div class="dash-brand">
+      <div class="logo-wrap small"></div>
+      <div class="app-name">MyApp</div>
+    </div>
+
+    <div class="dash-user">
+      <div class="avatar-circle"><%= firstChar %></div>
+      <div class="user-name"><%= displayName %></div>
+      <a href="/auth/logout" class="btn-logout">Đăng xuất</a>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-label">Phương thức đăng nhập</div>
+      <div class="stat-value">OIDC / Keycloak</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Token còn hạn</div>
+      <div class="stat-value" id="token-countdown"><%= remainingDisplay %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Phiên hoạt động</div>
+      <div class="stat-value">1</div>
+    </div>
+  </div>
+
+  <div class="dash-panels">
+    <div class="panel">
+      <div class="panel-title">JWT Payload (giải mã)</div>
+      <pre class="code-block"><%= payloadJson %></pre>
+
+      <div class="panel-title" style="margin-top: 14px;">Roles hiện tại</div>
+      <div class="roles-row">
+        <% if (roles.length === 0) { %>
+          <span class="role-badge">không có role</span>
+        <% } else { %>
+          <% roles.forEach((role) => { %>
+            <span class="role-badge"><%= role %></span>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Quyền truy cập (RBAC)</div>
+      <div class="rbac-list">
+        <% rbacItems.forEach((item) => { %>
+          <div class="rbac-row">
+            <span class="rbac-label"><%= item.label %></span>
+            <% if (item.allow) { %>
+              <span class="rbac-badge allow">Cho phép</span>
+            <% } else { %>
+              <span class="rbac-badge deny">Từ chối</span>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+  (function () {
+    const root = document.querySelector('.dashboard-wrap');
+    const countdownEl = document.getElementById('token-countdown');
+    if (!root || !countdownEl) return;
+
+    const expiresAt = Number(root.dataset.expiresAt || 0);
+    if (!expiresAt) {
+      window.location.href = '/auth/session-expired';
+      return;
+    }
+
+    function renderCountdown() {
+      const now = Math.floor(Date.now() / 1000);
+      const remaining = expiresAt - now;
+
+      if (remaining <= 0) {
+        countdownEl.textContent = '0:00';
+        window.location.href = '/auth/session-expired';
+        return false;
+      }
+
+      const minutes = Math.floor(remaining / 60);
+      const seconds = String(remaining % 60).padStart(2, '0');
+      countdownEl.textContent = `${minutes}:${seconds}`;
+      return true;
+    }
+
+    if (!renderCountdown()) return;
+
+    const timer = setInterval(() => {
+      const keepRunning = renderCountdown();
+      if (!keepRunning) {
+        clearInterval(timer);
+      }
+    }, 1000);
+  })();
+</script>

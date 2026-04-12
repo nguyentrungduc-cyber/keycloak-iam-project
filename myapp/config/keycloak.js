@@ -1,21 +1,25 @@
-const dotenv = require('dotenv');
-const Keycloak = require('keycloak-connect');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
-
-dotenv.config();
+const { Issuer } = require('openid-client');
 
 const memoryStore = new MemoryStore({ checkPeriod: 86400000 });
 
-const keycloakConfig = {
-  clientId: process.env.KEYCLOAK_CLIENT_ID,
-  bearerOnly: false,
-  serverUrl: process.env.KEYCLOAK_URL,
-  realm: process.env.KEYCLOAK_REALM,
-  credentials: { secret: process.env.KEYCLOAK_CLIENT_SECRET },
-  "confidential-port": 0
-};
+async function initOidcClient(port) {
+  const issuer = await Issuer.discover(
+    `${process.env.KC_SERVER_URL}/realms/${process.env.KC_REALM}`
+  );
 
-const keycloak = new Keycloak({ store: memoryStore }, keycloakConfig);
+  const redirectUri = `http://localhost:${port}/auth/callback`;
+  const postLogoutRedirectUri = `http://localhost:${port}/`;
 
-module.exports = { keycloak, memoryStore };
+  const client = new issuer.Client({
+    client_id: process.env.KC_CLIENT_ID,
+    client_secret: process.env.KC_CLIENT_SECRET,
+    redirect_uris: [redirectUri],
+    response_types: ['code']
+  });
+
+  return { client, redirectUri, postLogoutRedirectUri };
+}
+
+module.exports = { memoryStore, initOidcClient };

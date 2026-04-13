@@ -1449,9 +1449,9 @@
     "port": "587",
     "host": "smtp.gmail.com",
     "replyTo": "",
-    "from": "24520324@gm.uit.edu.vn",
+    "from": "foxgcute@gmail.com",
     "fromDisplayName": "MyApp",
-    "user": "24520324@gm.uit.edu.vn"
+    "user": "foxgcute@gmail.com"
   },
   "eventsEnabled": false,
   "eventsListeners": [
@@ -1526,14 +1526,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
+            "saml-user-property-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-property-mapper",
             "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
-            "oidc-full-name-mapper",
-            "oidc-usermodel-attribute-mapper",
             "saml-role-list-mapper",
-            "oidc-address-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-full-name-mapper",
+            "oidc-address-mapper"
           ]
         }
       },

@@ -154,8 +154,9 @@ body {
 .dash-topbar {
   display: flex; align-items: center;
   justify-content: space-between;
-  background: #1e293b;
-  border-bottom: 0.5px solid #334155;
+  background: #30302e;
+  border: 0.5px solid #41413e;
+  border-radius: 10px; padding: 16px 18px;
   padding: 14px 28px;
 }
 
@@ -164,7 +165,7 @@ body {
 .dash-user  { display: flex; align-items: center; gap: 12px; }
 .avatar-circle {
   width: 34px; height: 34px; border-radius: 50%;
-  background: #334155; color: #94a3b8;
+  background: #3b82f6; color: #ffffff;
   display: flex; align-items: center; justify-content: center;
   font-weight: 600; font-size: 13px;
 }
@@ -184,12 +185,12 @@ body {
   padding: 20px 28px 0;
 }
 .stat-card {
-  flex: 1; background: #1e293b;
-  border: 0.5px solid #334155;
+  flex: 1; background: #262624;
+  border: 0.5px solid #41413e;
   border-radius: 10px; padding: 16px 18px;
 }
 .stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
-.stat-value { font-size: 18px; font-weight: 600; color: var(--text-light); }
+.stat-value { font-size: 24px; font-weight: 600; color: var(--text-light); }
 
 .dash-panels {
   display: flex; gap: 14px;
@@ -197,9 +198,9 @@ body {
   flex: 1;
 }
 .panel {
-  flex: 1; background: #1e293b;
-  border: 0.5px solid #334155;
-  border-radius: 12px; padding: 20px;
+  flex: 1; background: #30302e;
+  border: 0.5px solid #41413e;
+  border-radius: 12px; padding: 28px;
 }
 .panel-title {
   font-size: 14px; font-weight: 600;
@@ -207,11 +208,16 @@ body {
 }
 
 .code-block {
-  background: #0f172a; border: 0.5px solid #334155;
+  background: #282c34; border: 0.5px solid #41413e;
   border-radius: 8px; padding: 14px;
   font-size: 12px; color: #7dd3fc;
-  overflow-x: auto; line-height: 1.7;
+  overflow-x: auto; overflow-y: auto; line-height: 1.7;
   font-family: 'Fira Code', monospace;
+  max-height: 350px;
+  scrollbar-width: none;
+}
+.code-block::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .roles-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -226,7 +232,7 @@ body {
   display: flex; align-items: center;
   justify-content: space-between;
   padding: 9px 0;
-  border-bottom: 0.5px solid #1e293b;
+  border-bottom: 0.5px solid #41413e;
 }
 .rbac-label { font-size: 13px; color: var(--text-light); }
 .rbac-badge {
@@ -235,6 +241,13 @@ body {
 }
 .rbac-badge.allow { background: #14532d; color: #4ade80; }
 .rbac-badge.deny  { background: #450a0a; color: #f87171; }
+
+/* ── HIGHLIGHT.JS JSON CUSTOM COLORS ── */
+.hljs-attr { color: #60a5fa !important; }      /* Keys: xanh */
+.hljs-string { color: #fbbf24 !important; }    /* Values: vàng/cam */
+.hljs-number { color: #6da242 !important; }    /* Numbers: lục */
+.hljs-literal { color: #fbbf24 !important; }   /* true/false/null */
+.hljs-punctuation { color: #d1d5db !important; } /* Dấu ngoặc: xám */
 
 @media (max-width: 700px) {
   .stat-row, .dash-panels { flex-direction: column; }

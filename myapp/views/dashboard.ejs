@@ -3,6 +3,9 @@
   const firstChar = (displayName || 'U').trim().charAt(0).toUpperCase() || 'U';
 %>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
 <div class="dashboard-wrap" data-expires-at="<%= expiresAt %>">
   <div class="dash-topbar">
     <div class="dash-brand">
@@ -35,7 +38,7 @@
   <div class="dash-panels">
     <div class="panel">
       <div class="panel-title">JWT Payload (giải mã)</div>
-      <pre class="code-block"><%= payloadJson %></pre>
+      <pre class="code-block"><code class="language-json"><%= payloadJson %></code></pre>
 
       <div class="panel-title" style="margin-top: 14px;">Roles hiện tại</div>
       <div class="roles-row">
@@ -69,6 +72,13 @@
 
 <script>
   (function () {
+    // Highlight JSON code
+    if (typeof hljs !== 'undefined') {
+      document.querySelectorAll('code.language-json').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+    }
+
     const root = document.querySelector('.dashboard-wrap');
     const countdownEl = document.getElementById('token-countdown');
     if (!root || !countdownEl) return;

@@ -1,108 +1,181 @@
-version: '3.8' # Docker Compose file format version
+version: '3.8' # Docker Compose version
 
 services:
 
-  # ── PostgreSQL ──────────────────────────────────────────
+  # ─────────────────────────────────────────────
+  # PostgreSQL - Shared Database cho toàn bộ cluster
+  # ─────────────────────────────────────────────
   postgres:
-    image: postgres:15 # Sử dụng PostgresSQL version 15
-    container_name: keycloak-db # Tên container để dễ quản lí/log/debug
+    image: postgres:15
+    container_name: keycloak-db
     environment:
-      POSTGRES_DB: keycloak             # Tên database được tạo
-      POSTGRES_USER: ${DB_USER}         # Username (lấy từ file .env)
-      POSTGRES_PASSWORD: ${DB_PASSWORD} # Password (lấy từ file .env)
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      # Docker volume để lưu dữ liệu DB (persist, không mất khi container stop)
     networks:
-      - keycloak-net # Cho phép container giao tiếp nội bộ với Keycloak
+      - keycloak-net
     healthcheck:
-      # Kiểm tra PostgreSQL đã sẵn sàng chưa
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
-      interval: 10s # mỗi 10 giây check 1 lần
-      timeout: 5s   # timeout mỗi lần check
-      retries: 5    # retry tối đa 5 lần trước khi fail
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # ── Keycloak ────────────────────────────────────────────
-  keycloak:
-    image: quay.io/keycloak/keycloak:24.0.3 # Image Keycloak chính thức
-    container_name: keycloak-server # Tên container
-    command: start-dev
-    # Chạy ở chế độ development (nhanh, dễ debug, không tối ưu production)
-
-    environment:
-      # ── Admin account ──
-      KEYCLOAK_ADMIN: ${KC_ADMIN_USER}              # Username admin (lấy từ file .env)
-      KEYCLOAK_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD} # Password admin (lấy từ file .env)
-
-      # ── Database config ──
-      KC_DB: postgres                # Chỉ định dùng PostgreSQL
-      KC_DB_URL_HOST: postgres       # Host = tên service postgres (Docker DNS)
-      KC_DB_URL_DATABASE: keycloak   # Tên DB
-      KC_DB_USERNAME: ${DB_USER}     # Username DB
-      KC_DB_PASSWORD: ${DB_PASSWORD} # Password DB
-
+  # ─────────────────────────────────────────────
+  # Nginx - Load Balancer đứng trước Keycloak cluster
+  # ─────────────────────────────────────────────
+  nginx:
+    image: nginx:latest
+    container_name: keycloak-lb
     ports:
       - "${KEYCLOAK_PORT:-8080}:8080"
-      # Map port:
-      # host:container
-      # Nếu không có KEYCLOAK_PORT trong .env mặc định 8080
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - keycloak-1
+      - keycloak-2
+    networks:
+      - keycloak-net
+
+  # ─────────────────────────────────────────────
+  # Keycloak Node 1
+  # ─────────────────────────────────────────────
+  keycloak-1:
+    image: quay.io/keycloak/keycloak:24.0.3
+    container_name: keycloak-node-1
+
+    # Có thể dùng start-dev (lab) hoặc start (chuẩn hơn)
+    command: start-dev --cache=ispn
+
+    environment:
+      # Admin account
+      KEYCLOAK_ADMIN: ${KC_ADMIN_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
+
+      # Database config
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: ${DB_USER}
+      KC_DB_PASSWORD: ${DB_PASSWORD}
+
+      # Cache (phục vụ clustering)
+      KC_CACHE: ispn
+      KC_CACHE_STACK: tcp
 
     volumes:
-      - keycloak_data:/opt/keycloak/data
-      # Lưu dữ liệu nội bộ của Keycloak (cache, temp, etc.)
-      
+      - keycloak_data_1:/opt/keycloak/data
       - ./keycloak/config/keycloak.conf:/opt/keycloak/conf/keycloak.conf
-      # Bind mount file config từ máy host vào container
-      # Cho phép chỉnh config mà không cần rebuild image
-
       - ./keycloak/themes:/opt/keycloak/themes
 
     depends_on:
       postgres:
         condition: service_healthy
-      # Chỉ start Keycloak khi PostgreSQL đã "healthy"
-      # Tránh lỗi connect DB khi DB chưa sẵn sàng
 
-    networks:
-      - keycloak-net # Kết nối cùng network với postgres
-
-  # ── MyApp (Node.js/EJS) ─────────────────────────────────
-  myapp:
-    build: ./myapp             # Đường dẫn tới thư mục chứa Dockerfile vừa tạo
-    container_name: myapp-server
-    restart: on-failure
-    command: >
-      sh -c "until node -e \"fetch('http://keycloak:8080/realms/master/.well-known/openid-configuration').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\"; do
-      echo 'Waiting for Keycloak...'; sleep 2; done; npm start"
-    ports:
-      - "${APP_PORT:-3000}:3000" # Sử dụng APP_PORT từ file .env
-    environment:
-      - NODE_ENV=development
-      - APP_PORT=3000
-      - KC_SERVER_URL=http://keycloak:8080
-      - KC_REALM=${KC_REALM}
-      - KC_CLIENT_ID=${KC_CLIENT_ID}
-      - KC_CLIENT_SECRET=${KC_CLIENT_SECRET}
-      - SESSION_SECRET=${SESSION_SECRET}
-    volumes:
-      - ./myapp:/usr/src/app   # Đồng bộ code: Sửa file .ejs bên ngoài là trong container đổi luôn
-      - /usr/src/app/node_modules # Giữ lại node_modules bên trong container
     networks:
       - keycloak-net
-    depends_on:
-      keycloak:
-        condition: service_started # MyApp sẽ đợi Keycloak start và tự chờ readiness trước khi npm start
 
+    healthcheck:
+      # Kiểm tra port 8080 đã mở chưa
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8080' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  # ─────────────────────────────────────────────
+  # Keycloak Node 2
+  # ─────────────────────────────────────────────
+  keycloak-2:
+    image: quay.io/keycloak/keycloak:24.0.3
+    container_name: keycloak-node-2
+    command: start-dev --cache=ispn
+
+    environment:
+      # (thêm admin cho đồng bộ)
+      KEYCLOAK_ADMIN: ${KC_ADMIN_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
+
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: ${DB_USER}
+      KC_DB_PASSWORD: ${DB_PASSWORD}
+
+      KC_CACHE: ispn
+      KC_CACHE_STACK: tcp
+
+    volumes:
+      - keycloak_data_2:/opt/keycloak/data
+      - ./keycloak/config/keycloak.conf:/opt/keycloak/conf/keycloak.conf
+      - ./keycloak/themes:/opt/keycloak/themes
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    networks:
+      - keycloak-net
+
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8080' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  # ─────────────────────────────────────────────
+  # MyApp - Client ứng dụng sử dụng Keycloak (OIDC)
+  # ─────────────────────────────────────────────
+  myapp:
+    build: ./myapp
+    container_name: myapp-server
+    restart: on-failure
+
+    # Chờ Keycloak cluster sẵn sàng rồi mới start app
+    command: >
+      sh -c "until node -e \"fetch('http://nginx:8080/realms/master/.well-known/openid-configuration')
+      .then(r => process.exit(r.ok ? 0 : 1))
+      .catch(() => process.exit(1))\"; do
+      echo 'Waiting for Keycloak cluster...'; sleep 2; done; npm start"
+
+    ports:
+      - "${APP_PORT:-3000}:3000"
+
+    environment:
+      NODE_ENV: development
+      APP_PORT: 3000
+
+      # Trỏ về Load Balancer (không gọi trực tiếp node)
+      KC_SERVER_URL: http://nginx:8080
+
+      KC_REALM: ${KC_REALM}
+      KC_CLIENT_ID: ${KC_CLIENT_ID}
+      KC_CLIENT_SECRET: ${KC_CLIENT_SECRET}
+      SESSION_SECRET: ${SESSION_SECRET}
+
+    volumes:
+      - ./myapp:/usr/src/app
+      - /usr/src/app/node_modules
+
+    networks:
+      - keycloak-net
+
+    depends_on:
+      - nginx
+
+# ─────────────────────────────────────────────
+# Volumes
+# ─────────────────────────────────────────────
 volumes:
   postgres_data:
-  # Volume lưu data PostgreSQL (persistent)
-  
-  keycloak_data:
-  # Volume lưu data nội bộ Keycloak
+  keycloak_data_1:
+  keycloak_data_2:
 
+# ─────────────────────────────────────────────
+# Network nội bộ giữa các container
+# ─────────────────────────────────────────────
 networks:
   keycloak-net:
     driver: bridge
-# Bridge network:
-# - Docker DNS: Các container gọi nhau qua service name (VD: http://postgres:5432)
-# - Isolation: Cô lập mạng, bên ngoài không thể truy cập nếu không map ports

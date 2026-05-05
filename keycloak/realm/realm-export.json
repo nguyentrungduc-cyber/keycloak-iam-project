@@ -724,7 +724,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "44iEMcT50CoskLzBQFDKGlQ0GSJEJCvd",
       "redirectUris": [
         "http://localhost:3000/*"
       ],
@@ -1451,7 +1451,7 @@
     "auth": "true",
     "envelopeFrom": "",
     "ssl": "false",
-    "password": "**********",
+    "password": "qyjg wgel taoo aisw",
     "port": "587",
     "host": "smtp.gmail.com",
     "replyTo": "",
@@ -1483,7 +1483,6 @@
       "authenticateByDefault": false,
       "linkOnly": false,
       "config": {
-        "clientSecret": "**********",
         "clientId": "812817674514-28504f4ob1c5iais8h3ts9o29da34f2l.apps.googleusercontent.com"
       }
     },
@@ -1505,7 +1504,7 @@
         "disableUserInfo": "false",
         "filteredByClaim": "false",
         "syncMode": "IMPORT",
-        "clientSecret": "**********"
+        "clientSecret": "d67c7de9fef9faf39127386b1cdfc14cc3b16f90"
       }
     }
   ],

@@ -46,4 +46,38 @@ router.get('/', protect, (req, res) => {
   });
 });
 
+router.get('/profile', protect, async (req, res) => {
+  try {
+    const tokenSet = req.session.tokenSet;
+
+    const response = await fetch(
+      `${process.env.KC_SERVER_URL}/realms/${process.env.KC_REALM}/protocol/openid-connect/userinfo`,
+      {
+        headers: {
+          Authorization: `Bearer ${tokenSet.access_token}`
+        }
+      }
+    );
+
+    // Nếu Keycloak trả lỗi → forward luôn
+    if (!response.ok) {
+      return res.status(response.status).send(await response.text());
+    }
+
+    const data = await response.json();
+
+    // Lấy node xử lý request từ Nginx header
+    const servedBy = response.headers.get('x-served-by');
+
+    res.json({
+      ...data,
+      served_by: servedBy || 'unknown'
+    });
+
+  } catch (err) {
+    console.error('Userinfo error:', err.message);
+    res.status(500).send('Keycloak request failed');
+  }
+});
+
 module.exports = router;

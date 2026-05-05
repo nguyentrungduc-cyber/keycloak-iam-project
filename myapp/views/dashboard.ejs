@@ -70,6 +70,11 @@
   </div>
 </div>
 
+<div style="margin-top:20px;">
+  <button onclick="checkProfile()">Test HA (Call Keycloak)</button>
+  <pre id="profile-result" style="background:#111; color:#0f0; padding:10px;"></pre>
+</div>
+
 <script>
   (function () {
     // Highlight JSON code
@@ -114,4 +119,24 @@
       }
     }, 1000);
   })();
+
+  async function checkProfile() {
+  const resultEl = document.getElementById('profile-result');
+  resultEl.textContent = 'Loading...';
+
+  try {
+    const res = await fetch('/dashboard/profile');
+    const text = await res.text();
+
+    try {
+      const data = JSON.parse(text);
+      resultEl.textContent = JSON.stringify(data, null, 2);
+    } catch {
+      resultEl.textContent = 'NOT JSON RESPONSE:\n\n' + text;
+    }
+
+  } catch (err) {
+    resultEl.textContent = 'ERROR: ' + err.message;
+  }
+}
 </script>

@@ -1483,7 +1483,6 @@
       "authenticateByDefault": false,
       "linkOnly": false,
       "config": {
-        "clientSecret": "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",
         "clientId": "812817674514-28504f4ob1c5iais8h3ts9o29da34f2l.apps.googleusercontent.com"
       }
     },

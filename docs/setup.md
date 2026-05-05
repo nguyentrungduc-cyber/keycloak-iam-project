@@ -22,97 +22,145 @@ cd keycloak-iam-project
 cp .env.example .env
 ```
 
-Mở file `.env` và điền giá trị:
+Mở file `.env` và điền giá trị (như file mẫu, lưu ý các thông số quan trọng):
 
 ```
-# ⚠️ HƯỚNG DẪN: Sao chép file này thành .env và điền giá trị thật.
-# ⚠️ QUAN TRỌNG: KHÔNG ĐƯỢC commit file .env lên GitHub để tránh lộ mật khẩu.
-
-# ── KeyCloak Admin (Tài khoản quản trị tối cao của Keycloak) ──
-# Dùng để đăng nhập vào trang quản trị (Admin Console)
-KC_ADMIN_USER=admin
-KC_ADMIN_PASSWORD=Admin@1234       # Nên đổi thành mật khẩu mạnh hơn khi triển khai thực tế
-
-# ── Database (Thông số kết nối cơ sở dữ liệu) ────────────────
-# Keycloak sẽ dùng thông tin này để tạo và quản lý bảng trong DB
-DB_USER=keycloak
-DB_PASSWORD=keycloak123            # Mật khẩu dùng cho Database trong Docker
-
-# ── Keycloak Server ──────────────────────────────────────────
-KEYCLOAK_PORT=8080                 # Cổng chạy dịch vụ Keycloak (mặc định là 8080)
-
-# ── Client App (Thông tin kết nối giữa App và Keycloak) ──────
-KC_REALM=uit-keycloak-realm        # Tên Realm bạn đã tạo trong Keycloak
-KC_CLIENT_ID=myapp-client          # ID của Client đã tạo trong mục Clients
-KC_CLIENT_SECRET=                  # Lấy tại tab 'Credentials' của Client trong Keycloak
-KC_SERVER_URL=http://localhost:8080 # Đường dẫn gốc để App gọi đến Server Keycloak
-
-# Thông số của ứng dụng phía Client (Node.js/React/ASP.NET)
-APP_PORT=3000                      # Cổng chạy ứng dụng của nhóm
-SESSION_SECRET=random-string-here  # Chuỗi ký tự ngẫu nhiên để mã hóa phiên làm việc
-
-# ── Social Login (Điền sau khi tạo OAuth App trên Google/GitHub) ──
-# Thông tin xác thực từ các nền tảng bên thứ ba
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-
-GITHUB_CLIENT_ID=
-GITHUB_CLIENT_SECRET=
+KC_REALM=uit-keycloak-realm
+KC_CLIENT_ID=myapp
+KC_SERVER_URL=http://nginx:8080
 ```
 
-## Bước 3 — Khởi động KeyCloak
+---
+
+## Bước 3 — Cấu hình tên miền ảo (BẮT BUỘC) ⚠️
+
+Do hệ thống sử dụng Load Balancer (Nginx) phía trước Keycloak trong mạng nội bộ Docker, bạn cần ánh xạ tên `nginx` về `localhost`.
+
+Nếu không cấu hình bước này, trình duyệt sẽ không redirect đúng khi đăng nhập.
+
+### Windows
+
+1. Mở Notepad bằng quyền Administrator  
+2. Mở file:
+```
+C:\Windows\System32\drivers\etc\hosts
+```
+3. Thêm dòng:
+```
+127.0.0.1 nginx
+```
+
+### Linux / macOS
 
 ```bash
-docker-compose up -d
+sudo nano /etc/hosts
 ```
 
-Chờ khoảng 30-60 giây. Kiểm tra:
+Thêm:
+```
+127.0.0.1 nginx
+```
+
+---
+
+## Bước 4 — Khởi động toàn bộ hệ thống (Keycloak HA + DB + Nginx + MyApp)
 
 ```bash
-docker-compose logs keycloak | tail -20
-# Tìm dòng: "Keycloak X.X.X on JVM started"
+docker compose up -d --build
 ```
 
-Truy cập: http://localhost:8080/admin  
-Đăng nhập bằng `KC_ADMIN_USER` và `KC_ADMIN_PASSWORD` trong file `.env`
+Ghi chú:
 
-## Bước 4 — Import Realm
+- Lần đầu chạy cần `--build`
+- Những lần sau chỉ cần:
+```bash
+docker compose up -d
+```
+- Khi thay đổi code hoặc cài thêm thư viện → nên chạy lại `--build`
 
-1. Vào Admin Console → Chọn "Create realm" (góc trên trái)
-2. Click "Browse..." → Chọn file `keycloak/realm-export.json`
-3. Click "Create"
+MyApp đã được chạy sẵn trong Docker → không cần `npm start`.
 
-## Bước 5 — Lấy Client Secret
+---
 
-1. Vào Realm `myrealm` → Clients → `myapp`
-2. Tab "Credentials" → Copy "Client secret"
-3. Dán vào `KC_CLIENT_SECRET` trong file `.env`
-
-## Bước 6 — Chạy Client App
+## Kiểm tra log
 
 ```bash
-cd client-app
-npm install
-npm start
+docker compose logs keycloak-1 --tail=20
+docker compose logs keycloak-2 --tail=20
 ```
 
-Truy cập: http://localhost:3000
+---
 
-## Kiểm tra hệ thống chạy đúng
+## Truy cập hệ thống
 
-1. Vào http://localhost:3000 → thấy trang chủ
-2. Click "Đăng nhập" → chuyển sang trang login KeyCloak
-3. Đăng nhập bằng user mẫu → vào được dashboard
-4. Vào http://localhost:3000/admin → thấy 403 nếu không có role admin
+- Keycloak Admin: http://localhost:8080/admin  
+- App: http://localhost:3000  
+
+---
+
+## Bước 5 — Import Realm & cấu hình Client
+
+1. Vào Admin Console  
+2. Create realm  
+3. Upload `keycloak/realm-export.json`  
+4. Vào realm → Clients → `myapp`  
+5. Tab Credentials → copy Client Secret  
+6. Dán vào `.env`  
+7. Restart app:
+
+```bash
+docker compose restart myapp
+```
+
+---
+
+## Bước 6 — Kiểm tra hệ thống
+
+1. Vào http://localhost:3000  
+2. Click đăng nhập  
+3. Login thành công → vào dashboard  
+
+---
+
+## Test High Availability (HA)
+
+1. Login vào hệ thống  
+2. Tắt 1 node:
+
+```bash
+docker stop keycloak-node-1
+```
+
+3. Reload trang  
+
+Kết quả mong đợi:
+- Không bị logout  
+- Trang vẫn hoạt động  
+
+→ chứng minh hệ thống có failover
+
+---
 
 ## Tắt hệ thống
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
-Tắt và xóa data (reset hoàn toàn):
+Reset toàn bộ dữ liệu:
 
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
+
+---
+
+## (Tùy chọn) Chạy MyApp riêng
+
+```bash
+cd myapp
+npm install
+npm start
+```
+
+⚠️ Không cần bước này nếu đã chạy bằng Docker Compose

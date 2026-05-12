@@ -27,7 +27,6 @@ Mở file `.env` và điền giá trị (như file mẫu, lưu ý các thông s�
 ```
 KC_REALM=uit-keycloak-realm
 KC_CLIENT_ID=myapp
-KC_SERVER_URL=http://nginx:8080
 ```
 
 ---

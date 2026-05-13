@@ -32,11 +32,11 @@
   "registrationAllowed": true,
   "registrationEmailAsUsername": true,
   "rememberMe": true,
-  "verifyEmail": false,
+  "verifyEmail": true,
   "loginWithEmailAllowed": true,
   "duplicateEmailsAllowed": false,
   "resetPasswordAllowed": true,
-  "editUsernameAllowed": false,
+  "editUsernameAllowed": true,
   "bruteForceProtected": true,
   "permanentLockout": false,
   "maxTemporaryLockouts": 0,
@@ -88,8 +88,8 @@
         "attributes": {}
       },
       {
-        "id": "14dc9a46-af41-4325-8421-6330b1b3fadd",
-        "name": "admin",
+        "id": "347743ed-4524-44db-82eb-ba255593dc23",
+        "name": "staff",
         "description": "",
         "composite": false,
         "clientRole": false,
@@ -97,8 +97,8 @@
         "attributes": {}
       },
       {
-        "id": "413522f0-a4c2-4d3c-bee7-bcd6aa3cc08a",
-        "name": "editor",
+        "id": "14dc9a46-af41-4325-8421-6330b1b3fadd",
+        "name": "admin",
         "description": "",
         "composite": false,
         "clientRole": false,
@@ -344,23 +344,6 @@
       ],
       "myapp": [
         {
-          "id": "76cb883e-462b-409b-b21c-0425d7132ff9",
-          "name": "uma_protection",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "571ce761-36d7-49e0-ae8d-073d8a9e5072",
-          "attributes": {}
-        },
-        {
-          "id": "601c11fe-e889-4989-9f2f-7fb68cb88335",
-          "name": "ADMIN",
-          "description": "",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "571ce761-36d7-49e0-ae8d-073d8a9e5072",
-          "attributes": {}
-        },
-        {
           "id": "ceaab74c-8628-4f53-832a-7824eae2a05f",
           "name": "User",
           "description": "",
@@ -467,7 +450,9 @@
       "path": "/NhanVien_MyApp",
       "subGroups": [],
       "attributes": {},
-      "realmRoles": [],
+      "realmRoles": [
+        "staff"
+      ],
       "clientRoles": {}
     }
   ],
@@ -495,7 +480,13 @@
     "totpAppGoogleName",
     "totpAppMicrosoftAuthenticatorName"
   ],
-  "localizationTexts": {},
+  "localizationTexts": {
+    "vi": {
+      "loginTimeout": "Đã xảy ra lỗi phiên, vui lòng quay lại ứng dụng và thử đăng nhập lại",
+      "internalServerError": "Hệ thống đang gặp sự cố nội bộ. Vui lòng liên hệ Admin.",
+      "updateProfileMessage": "Bạn cần cập nhật hồ sơ cá nhân để kích hoạt tài khoản."
+    }
+  },
   "webAuthnPolicyRpEntityName": "keycloak",
   "webAuthnPolicySignatureAlgorithms": [
     "ES256"
@@ -522,31 +513,6 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
-  "users": [
-    {
-      "id": "2a67cad6-551d-446e-abb2-ec901457cc02",
-      "username": "service-account-myapp",
-      "emailVerified": false,
-      "createdTimestamp": 1778230105726,
-      "enabled": true,
-      "totp": false,
-      "serviceAccountClientId": "myapp",
-      "disableableCredentialTypes": [],
-      "requiredActions": [
-        "VERIFY_EMAIL"
-      ],
-      "realmRoles": [
-        "default-roles-uit-keycloak-realm"
-      ],
-      "clientRoles": {
-        "myapp": [
-          "uma_protection"
-        ]
-      },
-      "notBefore": 0,
-      "groups": []
-    }
-  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -758,7 +724,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "44iEMcT50CoskLzBQFDKGlQ0GSJEJCvd",
       "redirectUris": [
         "http://localhost:3000/*"
       ],
@@ -771,13 +737,12 @@
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": true,
-      "authorizationServicesEnabled": true,
+      "serviceAccountsEnabled": false,
       "publicClient": false,
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
-        "client.secret.creation.time": "1775445585",
+        "client.secret.creation.time": "1777821882",
         "post.logout.redirect.uris": "http://localhost:3000/*",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
@@ -796,53 +761,6 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "id": "195b2b28-0d68-4618-8b0f-46e152f63915",
-          "name": "Client Host",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientHost",
-            "introspection.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientHost",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "fb9d1f30-bda7-41be-aab7-b492b00728d7",
-          "name": "Client IP Address",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientAddress",
-            "introspection.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientAddress",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "e070f755-93c5-4cfb-9f47-2018ea7f6546",
-          "name": "Client ID",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "client_id",
-            "introspection.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "client_id",
-            "jsonType.label": "String"
-          }
-        }
-      ],
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -855,166 +773,7 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ],
-      "authorizationSettings": {
-        "allowRemoteResourceManagement": true,
-        "policyEnforcementMode": "ENFORCING",
-        "resources": [
-          {
-            "name": "Default Resource",
-            "type": "urn:myapp:resources:default",
-            "ownerManagedAccess": false,
-            "attributes": {},
-            "_id": "657a1bc0-2daf-4041-994a-326069dba4cc",
-            "uris": [
-              "/*"
-            ]
-          },
-          {
-            "name": "document",
-            "ownerManagedAccess": false,
-            "displayName": "Document",
-            "attributes": {},
-            "_id": "3a0dcd45-645e-4d1b-9e34-91149aafad29",
-            "uris": [],
-            "scopes": [
-              {
-                "name": "view"
-              },
-              {
-                "name": "edit"
-              },
-              {
-                "name": "delete"
-              },
-              {
-                "name": "create"
-              }
-            ],
-            "icon_uri": ""
-          }
-        ],
-        "policies": [
-          {
-            "id": "8a3a6b11-24f9-4083-98c5-6cfde60ff816",
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-            }
-          },
-          {
-            "id": "ce5a9c55-da32-451f-8ebf-870e848d02eb",
-            "name": "User policy ",
-            "description": "",
-            "type": "role",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "roles": "[{\"id\":\"myapp/User\",\"required\":false},{\"id\":\"user\",\"required\":false}]"
-            }
-          },
-          {
-            "id": "3cd20d84-9f54-4dc2-b60b-c5041b3794b8",
-            "name": "Editor policy",
-            "description": "",
-            "type": "role",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "roles": "[{\"id\":\"editor\",\"required\":false}]"
-            }
-          },
-          {
-            "id": "66a408c3-7d78-498b-98b5-169940d2c144",
-            "name": "Admin Policy",
-            "description": "",
-            "type": "role",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "roles": "[{\"id\":\"admin\",\"required\":false},{\"id\":\"myapp/ADMIN\",\"required\":false}]"
-            }
-          },
-          {
-            "id": "6a7ea495-b937-4895-9fbb-8f6f7eb0be56",
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:myapp:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          },
-          {
-            "id": "58f998f3-7339-4138-924d-af5941bcc239",
-            "name": "View Permission",
-            "description": "",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "resources": "[\"document\"]",
-              "scopes": "[\"view\"]",
-              "applyPolicies": "[\"User policy \",\"Editor policy\",\"Admin Policy\"]"
-            }
-          },
-          {
-            "id": "a86c068f-246d-458d-b63a-4364be9993ec",
-            "name": "Create and Edit Permission",
-            "description": "",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "resources": "[\"document\"]",
-              "scopes": "[\"edit\",\"create\"]",
-              "applyPolicies": "[\"Editor policy\",\"Admin Policy\"]"
-            }
-          },
-          {
-            "id": "0d87c0ff-a396-4ee1-a2fa-fc254eddb275",
-            "name": "Delete Permission",
-            "description": "",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "resources": "[\"document\"]",
-              "scopes": "[\"delete\"]",
-              "applyPolicies": "[\"Admin Policy\"]"
-            }
-          }
-        ],
-        "scopes": [
-          {
-            "id": "afef5dc3-8ac2-4ec8-b440-a7ac93340920",
-            "name": "create",
-            "iconUri": ""
-          },
-          {
-            "id": "57a142c9-3371-45e2-bad5-fad1c122f51f",
-            "name": "view",
-            "iconUri": ""
-          },
-          {
-            "id": "d5326fa3-2a48-45ea-ae98-fd98f7339a5a",
-            "name": "edit",
-            "iconUri": ""
-          },
-          {
-            "id": "0176427d-3371-44c5-9e9a-094ce222c560",
-            "name": "delete",
-            "iconUri": ""
-          }
-        ],
-        "decisionStrategy": "AFFIRMATIVE"
-      }
+      ]
     },
     {
       "id": "fcb5e9ae-580d-48b2-904e-c13ca89a1423",
@@ -1692,14 +1451,18 @@
     "auth": "true",
     "envelopeFrom": "",
     "ssl": "false",
-    "password": "**********",
+    "password": "qyjg wgel taoo aisw",
     "port": "587",
     "host": "smtp.gmail.com",
     "replyTo": "",
-    "from": "24520324@gm.uit.edu.vn",
+    "from": "nguyentrungduc190906@gmail.com",
     "fromDisplayName": "MyApp",
-    "user": "24520324@gm.uit.edu.vn"
+    "user": "nguyentrungduc190906@gmail.com"
   },
+  "loginTheme": "my-theme",
+  "accountTheme": "",
+  "adminTheme": "",
+  "emailTheme": "",
   "eventsEnabled": false,
   "eventsListeners": [
     "jboss-logging"
@@ -1710,8 +1473,24 @@
   "identityProviders": [
     {
       "alias": "google",
-      "internalId": "a8de7aa3-d076-487e-81fe-599b3a5ba71a",
+      "internalId": "65e812ea-5dfa-4453-bb32-9800fd63ab6c",
       "providerId": "google",
+      "enabled": true,
+      "updateProfileFirstLoginMode": "on",
+      "trustEmail": false,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": false,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "config": {
+        "clientSecret": "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",
+        "clientId": "812817674514-28504f4ob1c5iais8h3ts9o29da34f2l.apps.googleusercontent.com"
+      }
+    },
+    {
+      "alias": "github",
+      "internalId": "4c2d4431-54aa-4993-9f72-ddca8564f0e5",
+      "providerId": "github",
       "enabled": true,
       "updateProfileFirstLoginMode": "on",
       "trustEmail": false,
@@ -1722,12 +1501,11 @@
       "config": {
         "hideOnLoginPage": "false",
         "acceptsPromptNoneForwardFromClient": "false",
-        "clientId": "490558634046-je57ihi7if3385ptjea5hfj84911kr2r.apps.googleusercontent.com",
+        "clientId": "Ov23liYAvXGrrp9fIoT0",
         "disableUserInfo": "false",
         "filteredByClaim": "false",
         "syncMode": "IMPORT",
-        "clientSecret": "**********",
-        "guiOrder": "1"
+        "clientSecret": "d67c7de9fef9faf39127386b1cdfc14cc3b16f90"
       }
     }
   ],
@@ -1742,13 +1520,13 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-role-list-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "saml-user-attribute-mapper",
-            "oidc-address-mapper",
             "oidc-full-name-mapper",
+            "saml-user-attribute-mapper",
             "oidc-usermodel-property-mapper",
             "oidc-sha256-pairwise-sub-mapper",
+            "saml-role-list-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-address-mapper",
             "saml-user-property-mapper"
           ]
         }
@@ -1796,14 +1574,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
-            "saml-user-attribute-mapper",
             "oidc-full-name-mapper",
-            "saml-user-property-mapper",
             "oidc-usermodel-property-mapper",
+            "saml-user-property-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-attribute-mapper",
             "saml-role-list-mapper",
             "oidc-address-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "saml-user-attribute-mapper"
           ]
         }
       },
@@ -1893,8 +1671,11 @@
       }
     ]
   },
-  "internationalizationEnabled": false,
-  "supportedLocales": [],
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "vi"
+  ],
+  "defaultLocale": "vi",
   "authenticationFlows": [
     {
       "id": "654c655f-2200-44a7-8462-bbdd759e6dcc",
@@ -2474,7 +2255,7 @@
       "name": "Verify Email",
       "providerId": "VERIFY_EMAIL",
       "enabled": true,
-      "defaultAction": true,
+      "defaultAction": false,
       "priority": 50,
       "config": {}
     },

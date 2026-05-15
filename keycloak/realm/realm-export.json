@@ -534,6 +534,46 @@
   },
   "clients": [
     {
+      "clientId": "http://localhost:8081/saml/metadata",
+      "name": "SAML Service Provider Demo",
+      "protocol": "saml",
+      "enabled": true,
+      "redirectUris": [
+        "http://localhost:8081/*"
+      ],
+      "attributes": {
+        "saml.authnstatement": "true",
+        "saml.server.signature": "true",
+        "saml.assertion.signature": "true",
+        "saml.client.signature": "false",
+        "saml.force.post.binding": "true",
+        "saml_name_id_format": "username",
+        "saml.signature.algorithm": "RSA_SHA256"
+      },
+      "protocolMappers": [
+        {
+          "name": "email-mapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "config": {
+            "attribute.nameformat": "Basic",
+            "user.attribute": "email",
+            "attribute.name": "email"
+          }
+        },
+        {
+          "name": "username-mapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "config": {
+            "attribute.nameformat": "Basic",
+            "user.attribute": "username",
+            "attribute.name": "username"
+          }
+        }
+      ]
+    },
+    {
       "id": "2c658311-84e6-4770-ba66-4e95d7c1c4df",
       "clientId": "account",
       "name": "${client_account}",

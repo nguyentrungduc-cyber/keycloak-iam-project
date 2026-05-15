@@ -64,6 +64,8 @@ router.get('/callback', async (req, res) => {
     const claims = tokenSet.claims();
     const accessTokenPayload = decodeJwtPayload(tokenSet.access_token);
     const realmRoles = accessTokenPayload?.realm_access?.roles || [];
+    const clientRoles = accessTokenPayload?.resource_access?.myapp?.roles || [];
+    const combinedRoles = [...new Set([...realmRoles, ...clientRoles])];
     req.session.tokenSet = {
       id_token: tokenSet.id_token,
       access_token: tokenSet.access_token,
@@ -75,7 +77,7 @@ router.get('/callback', async (req, res) => {
     };
     req.session.user = claims;
     req.session.accessTokenPayload = accessTokenPayload;
-    req.session.roles = realmRoles;
+    req.session.roles = combinedRoles;
     delete req.session.oidc;
 
     return res.redirect('/dashboard');

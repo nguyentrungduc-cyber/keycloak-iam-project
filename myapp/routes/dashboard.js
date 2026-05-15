@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/', protect, (req, res) => {
   const user = req.session.user || {};
   const accessTokenPayload = req.session.accessTokenPayload || {};
-  const roles = accessTokenPayload?.realm_access?.roles || req.session.roles || [];
+  const roles = req.session.roles || [];
   const tokenSet = req.session.tokenSet || {};
 
   const expiresAt = Number(tokenSet.expires_at || 0);
@@ -27,13 +27,15 @@ router.get('/', protect, (req, res) => {
         iss: user.iss
       };
 
+  const isAdmin = roles.includes('Super Admin') || roles.includes('admin');
+
   const rbacItems = [
-    { label: 'Xem danh sách user', allow: roles.includes('admin') || roles.includes('editor') },
-    { label: 'Tạo user mới', allow: roles.includes('admin') || roles.includes('editor') },
-    { label: 'Xóa user', allow: roles.includes('admin') },
-    { label: 'Xem báo cáo', allow: roles.includes('admin') || roles.includes('editor') },
-    { label: 'Cài đặt hệ thống', allow: roles.includes('admin') },
-    { label: 'Export database', allow: roles.includes('admin') }
+    { label: 'Xem danh sách user', allow: isAdmin || roles.includes('editor') },
+    { label: 'Tạo user mới', allow: isAdmin || roles.includes('editor') },
+    { label: 'Xóa user', allow: isAdmin },
+    { label: 'Xem báo cáo', allow: isAdmin || roles.includes('editor') },
+    { label: 'Cài đặt hệ thống', allow: isAdmin },
+    { label: 'Export database', allow: isAdmin }
   ];
 
   res.render('dashboard', {

@@ -239,8 +239,8 @@ body {
   font-size: 12px; font-weight: 600;
   border-radius: 6px; padding: 3px 12px;
 }
-.rbac-badge.allow { background: #14532d; color: #4ade80; }
-.rbac-badge.deny  { background: #450a0a; color: #f87171; }
+.rbac-badge.allow, .rbac-badge.bg-success { background: #14532d; color: #4ade80; }
+.rbac-badge.deny, .rbac-badge.bg-danger   { background: #450a0a; color: #f87171; }
 
 /* ── HIGHLIGHT.JS JSON CUSTOM COLORS ── */
 .hljs-attr { color: #60a5fa !important; }      /* Keys: xanh */

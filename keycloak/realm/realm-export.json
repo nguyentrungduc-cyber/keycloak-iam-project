@@ -80,15 +80,6 @@
         "attributes": {}
       },
       {
-        "id": "b546d2b9-0417-4d71-9a33-c212ab00047b",
-        "name": "editor",
-        "description": "",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "ff70f815-16fb-42ef-9a2f-19a711e64c56",
-        "attributes": {}
-      },
-      {
         "id": "665fd3a1-306b-4c0c-807f-67bf08e35662",
         "name": "offline_access",
         "description": "${role_offline-access}",
@@ -98,8 +89,8 @@
         "attributes": {}
       },
       {
-        "id": "14dc9a46-af41-4325-8421-6330b1b3fadd",
-        "name": "admin",
+        "id": "76a01ba7-5514-4478-bb1e-9fa033e80c44",
+        "name": "Super Admin",
         "description": "",
         "composite": true,
         "composites": {
@@ -135,7 +126,12 @@
         "id": "379ce6f5-66b1-4f19-87d4-4843d95b1f35",
         "name": "user",
         "description": "",
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "realm": [
+            "default-roles-uit-keycloak-realm"
+          ]
+        },
         "clientRole": false,
         "containerId": "ff70f815-16fb-42ef-9a2f-19a711e64c56",
         "attributes": {}
@@ -836,6 +832,7 @@
           "config": {
             "user.session.note": "clientAddress",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientAddress",
@@ -851,6 +848,7 @@
           "config": {
             "user.session.note": "clientHost",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientHost",
@@ -866,6 +864,7 @@
           "config": {
             "user.session.note": "client_id",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "client_id",
@@ -924,31 +923,7 @@
             "icon_uri": ""
           }
         ],
-        "policies": [
-          {
-            "id": "d8a09e85-d366-43c3-ab27-4646b1c3bc8d",
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-            }
-          },
-          {
-            "id": "4b799669-1710-4be1-b724-f1f3ef9c50bb",
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:myapp:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          }
-        ],
+        "policies": [],
         "scopes": [
           {
             "id": "5a2a829e-b4f8-4f2e-8f48-0e3ae02abf68",
@@ -1723,14 +1698,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
             "oidc-address-mapper",
             "oidc-full-name-mapper",
-            "saml-role-list-mapper",
-            "saml-user-attribute-mapper",
+            "saml-user-property-mapper",
             "oidc-usermodel-property-mapper",
+            "saml-user-attribute-mapper",
             "oidc-sha256-pairwise-sub-mapper",
-            "saml-user-property-mapper"
+            "oidc-usermodel-attribute-mapper",
+            "saml-role-list-mapper"
           ]
         }
       },
@@ -1777,14 +1752,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-full-name-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "saml-user-attribute-mapper",
             "saml-role-list-mapper",
             "oidc-address-mapper",
-            "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
-            "oidc-full-name-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-usermodel-property-mapper"
+            "oidc-usermodel-property-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },

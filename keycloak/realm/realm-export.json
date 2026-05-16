@@ -80,15 +80,6 @@
         "attributes": {}
       },
       {
-        "id": "b546d2b9-0417-4d71-9a33-c212ab00047b",
-        "name": "editor",
-        "description": "",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "ff70f815-16fb-42ef-9a2f-19a711e64c56",
-        "attributes": {}
-      },
-      {
         "id": "665fd3a1-306b-4c0c-807f-67bf08e35662",
         "name": "offline_access",
         "description": "${role_offline-access}",
@@ -98,8 +89,8 @@
         "attributes": {}
       },
       {
-        "id": "14dc9a46-af41-4325-8421-6330b1b3fadd",
-        "name": "admin",
+        "id": "76a01ba7-5514-4478-bb1e-9fa033e80c44",
+        "name": "Super Admin",
         "description": "",
         "composite": true,
         "composites": {
@@ -135,7 +126,12 @@
         "id": "379ce6f5-66b1-4f19-87d4-4843d95b1f35",
         "name": "user",
         "description": "",
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "realm": [
+            "default-roles-uit-keycloak-realm"
+          ]
+        },
         "clientRole": false,
         "containerId": "ff70f815-16fb-42ef-9a2f-19a711e64c56",
         "attributes": {}
@@ -528,11 +524,11 @@
       "updateProfileMessage": "Bạn cần cập nhật hồ sơ cá nhân để kích hoạt tài khoản."
     }
   },
-  "webAuthnPolicyRpEntityName": "keycloak",
+  "webAuthnPolicyRpEntityName": "localhost",
   "webAuthnPolicySignatureAlgorithms": [
     "ES256"
   ],
-  "webAuthnPolicyRpId": "localhost",
+  "webAuthnPolicyRpId": "MyApp",
   "webAuthnPolicyAttestationConveyancePreference": "not specified",
   "webAuthnPolicyAuthenticatorAttachment": "not specified",
   "webAuthnPolicyRequireResidentKey": "Yes",
@@ -541,14 +537,14 @@
   "webAuthnPolicyAvoidSameAuthenticatorRegister": true,
   "webAuthnPolicyAcceptableAaguids": [],
   "webAuthnPolicyExtraOrigins": [],
-  "webAuthnPolicyPasswordlessRpEntityName": "keycloak",
+  "webAuthnPolicyPasswordlessRpEntityName": "MyApp",
   "webAuthnPolicyPasswordlessSignatureAlgorithms": [
     "ES256"
   ],
-  "webAuthnPolicyPasswordlessRpId": "",
+  "webAuthnPolicyPasswordlessRpId": "localhost",
   "webAuthnPolicyPasswordlessAttestationConveyancePreference": "not specified",
   "webAuthnPolicyPasswordlessAuthenticatorAttachment": "not specified",
-  "webAuthnPolicyPasswordlessRequireResidentKey": "not specified",
+  "webAuthnPolicyPasswordlessRequireResidentKey": "Yes",
   "webAuthnPolicyPasswordlessUserVerificationRequirement": "not specified",
   "webAuthnPolicyPasswordlessCreateTimeout": 0,
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
@@ -876,6 +872,7 @@
           "config": {
             "user.session.note": "clientAddress",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientAddress",
@@ -891,10 +888,21 @@
           "config": {
             "user.session.note": "clientHost",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "0e041309-b552-482b-84ee-75f4a9a1f07c",
+          "name": "auto-grant-viewer-role",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "role": "myapp.viewer"
           }
         },
         {
@@ -906,6 +914,7 @@
           "config": {
             "user.session.note": "client_id",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "client_id",
@@ -1739,14 +1748,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
             "oidc-address-mapper",
             "oidc-full-name-mapper",
-            "saml-role-list-mapper",
-            "saml-user-attribute-mapper",
+            "saml-user-property-mapper",
             "oidc-usermodel-property-mapper",
+            "saml-user-attribute-mapper",
             "oidc-sha256-pairwise-sub-mapper",
-            "saml-user-property-mapper"
+            "oidc-usermodel-attribute-mapper",
+            "saml-role-list-mapper"
           ]
         }
       },
@@ -1793,14 +1802,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-full-name-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "saml-user-attribute-mapper",
             "saml-role-list-mapper",
             "oidc-address-mapper",
-            "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
-            "oidc-full-name-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-usermodel-property-mapper"
+            "oidc-usermodel-property-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },
@@ -2521,7 +2530,7 @@
       "id": "1f47322f-a2d8-4449-bd90-5b5a744bf61d",
       "alias": "check-admin-role",
       "config": {
-        "condUserRole": "admin"
+        "condUserRole": "Super Admin"
       }
     },
     {

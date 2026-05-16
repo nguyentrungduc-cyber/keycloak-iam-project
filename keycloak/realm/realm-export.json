@@ -964,31 +964,7 @@
             "icon_uri": ""
           }
         ],
-        "policies": [
-          {
-            "id": "d8a09e85-d366-43c3-ab27-4646b1c3bc8d",
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-            }
-          },
-          {
-            "id": "4b799669-1710-4be1-b724-f1f3ef9c50bb",
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:myapp:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          }
-        ],
+        "policies": [],
         "scopes": [
           {
             "id": "5a2a829e-b4f8-4f2e-8f48-0e3ae02abf68",

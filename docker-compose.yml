@@ -71,6 +71,7 @@ services:
       KC_HOSTNAME_PORT: 8080
       KC_HOSTNAME_STRICT_HTTPS: "false"
       KC_HTTP_ENABLED: "true"
+      KC_FEATURES: scripts # <--- THÊM DÒNG NÀY VÀO ĐÂY
 
     volumes:
       - keycloak_data_1:/opt/keycloak/data
@@ -122,6 +123,7 @@ services:
       KC_HOSTNAME_PORT: 8080
       KC_HOSTNAME_STRICT_HTTPS: "false"
       KC_HTTP_ENABLED: "true"
+      KC_FEATURES: scripts
 
     volumes:
       - keycloak_data_2:/opt/keycloak/data
@@ -186,13 +188,10 @@ services:
   saml-test-sp:
     image: ghcr.io/beryju/saml-test-sp:latest
     container_name: saml-test-sp
-
     depends_on:
       - nginx
-
     ports:
       - "8081:9009"
-
     environment:
       - SP_ENTITY_ID=http://localhost:8081/saml/metadata
       # Sử dụng keycloak-lb để đi qua Nginx Load Balancer

@@ -524,11 +524,11 @@
       "updateProfileMessage": "Bạn cần cập nhật hồ sơ cá nhân để kích hoạt tài khoản."
     }
   },
-  "webAuthnPolicyRpEntityName": "keycloak",
+  "webAuthnPolicyRpEntityName": "localhost",
   "webAuthnPolicySignatureAlgorithms": [
     "ES256"
   ],
-  "webAuthnPolicyRpId": "localhost",
+  "webAuthnPolicyRpId": "MyApp",
   "webAuthnPolicyAttestationConveyancePreference": "not specified",
   "webAuthnPolicyAuthenticatorAttachment": "not specified",
   "webAuthnPolicyRequireResidentKey": "Yes",
@@ -537,14 +537,14 @@
   "webAuthnPolicyAvoidSameAuthenticatorRegister": true,
   "webAuthnPolicyAcceptableAaguids": [],
   "webAuthnPolicyExtraOrigins": [],
-  "webAuthnPolicyPasswordlessRpEntityName": "keycloak",
+  "webAuthnPolicyPasswordlessRpEntityName": "MyApp",
   "webAuthnPolicyPasswordlessSignatureAlgorithms": [
     "ES256"
   ],
-  "webAuthnPolicyPasswordlessRpId": "",
+  "webAuthnPolicyPasswordlessRpId": "localhost",
   "webAuthnPolicyPasswordlessAttestationConveyancePreference": "not specified",
   "webAuthnPolicyPasswordlessAuthenticatorAttachment": "not specified",
-  "webAuthnPolicyPasswordlessRequireResidentKey": "not specified",
+  "webAuthnPolicyPasswordlessRequireResidentKey": "Yes",
   "webAuthnPolicyPasswordlessUserVerificationRequirement": "not specified",
   "webAuthnPolicyPasswordlessCreateTimeout": 0,
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
@@ -853,6 +853,16 @@
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "0e041309-b552-482b-84ee-75f4a9a1f07c",
+          "name": "auto-grant-viewer-role",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "role": "myapp.viewer"
           }
         },
         {
@@ -2480,7 +2490,7 @@
       "id": "1f47322f-a2d8-4449-bd90-5b5a744bf61d",
       "alias": "check-admin-role",
       "config": {
-        "condUserRole": "admin"
+        "condUserRole": "Super Admin"
       }
     },
     {

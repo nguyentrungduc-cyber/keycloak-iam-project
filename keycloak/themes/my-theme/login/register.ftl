@@ -2,51 +2,38 @@
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('firstName','lastName','email','username','password','password-confirm') ; section>
 
 <#if section = "header">
-    <#-- Bỏ trống phần này để ẩn chữ "Register" mặc định to đùng của Keycloak -->
 <#elseif section = "form">
 <link rel="stylesheet" href="${url.resourcesPath}/css/theme.css"/>
 
-<#-- Bổ sung CSS trực tiếp để fix các lỗi Layout -->
 <style>
-    /* Ẩn vùng header mặc định của Keycloak nếu có */
     #kc-header { display: none !important; }
-    
-    /* Căn giữa Logo và Tiêu đề */
     .kc-header { text-align: center; margin-bottom: 24px; }
     .kc-logo { display: flex; justify-content: center; margin-bottom: 12px; }
     .kc-logo-icon { background: #2563eb; padding: 10px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; }
     .kc-title { font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 6px; }
     .kc-subtitle { font-size: 13px; color: #888; }
-
-    /* Fix 2 cột cho Họ & Tên */
     .input-row { display: flex; gap: 16px; width: 100%; }
     .input-row > div { flex: 1; }
-
-    /* Fix Input Fields */
     .kc-form-group { margin-bottom: 16px; }
     .kc-form-group label { display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; text-align: left; }
     .kc-form-group input { width: 100%; padding: 12px 14px; background: transparent; border: 1px solid #444; border-radius: 8px; color: #fff; box-sizing: border-box; font-size: 14px; }
     .kc-form-group input:focus { border-color: #60a5fa; outline: none; }
-
-    /* Nút Submit */
     .kc-btn-primary { width: 100%; padding: 12px; background: #262626; border: 1px solid #444; border-radius: 8px; color: #fff; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-top: 8px; font-size: 14px;}
     .kc-btn-primary:hover { background: #333; }
-
-    /* Fix đường kẻ (Divider) "hoặc tiếp tục với" */
     .kc-divider { display: flex; align-items: center; text-align: center; margin: 24px 0; color: #666; font-size: 13px; }
     .kc-divider::before, .kc-divider::after { content: ''; flex: 1; border-bottom: 1px solid #333; }
     .kc-divider span { padding: 0 12px; }
-
-    /* Fix Nút Social Login */
     .kc-btn-social { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; background: transparent; border: 1px solid #333; border-radius: 8px; color: #fff; text-decoration: none; font-size: 14px; margin-bottom: 12px; transition: background 0.2s; box-sizing: border-box; font-weight: 500; }
     .kc-btn-social:hover { background: #1a1a1a; }
-
-    /* Footer */
     .kc-footer { text-align: center; margin-top: 24px; font-size: 13px; color: #888; }
     .kc-footer a { color: #60a5fa; text-decoration: none; font-weight: 500; margin-left: 4px; }
-
-    /* Ẩn chữ powered dưới cùng (vì đã đưa lên subtitle) */
     .kc-powered { display: none; }
+
+    /* CSS cho con mắt mật khẩu */
+    .pwd-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
+    .pwd-wrapper input { padding-right: 40px !important; }
+    .pwd-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888; display: flex; }
+    .pwd-toggle:hover { color: #ccc; }
 </style>
 
 <div class="kc-header">
@@ -60,10 +47,8 @@
     </div>
     <div class="kc-title">Tạo tài khoản</div>
     <div class="kc-subtitle">MyApp — Powered by Keycloak</div>
-
 </div>
 
-<#-- Hiển thị lỗi chung nếu có -->
 <#if message?has_content && (message.type != 'warning' || !isAppInitiatedAction??)>
     <div class="kc-alert kc-alert-${message.type}" style="color: #ef4444; font-size: 13px; text-align: center; margin-bottom: 16px;">
         ${kcSanitize(message.summary)?no_esc}
@@ -72,70 +57,53 @@
 
 <form id="kc-register-form" action="${url.registrationAction}" method="post">
 
-    <#-- Họ & Tên -->
     <div class="kc-form-group">
         <div class="input-row">
             <div>
                 <label for="firstName">Họ</label>
-                <input type="text" id="firstName" name="firstName"
-                       value="${(register.formData.firstName!'')}"
-                       placeholder="Nguyễn"
-                       autocomplete="given-name"
-                       aria-invalid="<#if messagesPerField.existsError('firstName')>true</#if>"/>
+                <input type="text" id="firstName" name="firstName" value="${(register.formData.firstName!'')}" placeholder="Nguyễn" autocomplete="given-name" aria-invalid="<#if messagesPerField.existsError('firstName')>true</#if>"/>
             </div>
             <div>
                 <label for="lastName">Tên</label>
-                <input type="text" id="lastName" name="lastName"
-                       value="${(register.formData.lastName!'')}"
-                       placeholder="Văn A"
-                       autocomplete="family-name"
-                       aria-invalid="<#if messagesPerField.existsError('lastName')>true</#if>"/>
+                <input type="text" id="lastName" name="lastName" value="${(register.formData.lastName!'')}" placeholder="Văn A" autocomplete="family-name" aria-invalid="<#if messagesPerField.existsError('lastName')>true</#if>"/>
             </div>
         </div>
     </div>
 
-    <#-- Email -->
     <div class="kc-form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" name="email"
-               value="${(register.formData.email!'')}"
-               placeholder="nguyenvana@example.com"
-               autocomplete="email"
-               aria-invalid="<#if messagesPerField.existsError('email')>true</#if>"/>
+        <input type="email" id="email" name="email" value="${(register.formData.email!'')}" placeholder="nguyenvana@example.com" autocomplete="email" aria-invalid="<#if messagesPerField.existsError('email')>true</#if>"/>
     </div>
 
-    <#-- Username (ẩn nếu dùng email làm username) -->
     <#if !realm.registrationEmailAsUsername>
     <div class="kc-form-group">
         <label for="username">${msg("username")}</label>
-        <input type="text" id="username" name="username"
-               value="${(register.formData.username!'')}"
-               autocomplete="username"
-               aria-invalid="<#if messagesPerField.existsError('username')>true</#if>"/>
+        <input type="text" id="username" name="username" value="${(register.formData.username!'')}" autocomplete="username" aria-invalid="<#if messagesPerField.existsError('username')>true</#if>"/>
     </div>
     </#if>
 
-    <#-- Mật khẩu -->
     <#if passwordRequired??>
     <div class="kc-form-group">
         <label for="password">Mật khẩu</label>
-        <input type="password" id="password" name="password"
-               placeholder="••••••••"
-               autocomplete="new-password"
-               oninput="checkStrength(this.value)"
-               aria-invalid="<#if messagesPerField.existsError('password','password-confirm')>true</#if>"/>
+        <div class="pwd-wrapper">
+            <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="new-password" oninput="checkStrength(this.value)" aria-invalid="<#if messagesPerField.existsError('password','password-confirm')>true</#if>"/>
+            <span class="pwd-toggle" onclick="togglePassword('password', 'eye-icon-reg1')">
+                <svg id="eye-icon-reg1" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+            </span>
+        </div>
     </div>
 
     <div class="kc-form-group">
         <label for="password-confirm">Xác nhận mật khẩu</label>
-        <input type="password" id="password-confirm" name="password-confirm"
-               placeholder="••••••••"
-               autocomplete="new-password"
-               aria-invalid="<#if messagesPerField.existsError('password-confirm')>true</#if>"/>
+        <div class="pwd-wrapper">
+            <input type="password" id="password-confirm" name="password-confirm" placeholder="••••••••" autocomplete="new-password" aria-invalid="<#if messagesPerField.existsError('password-confirm')>true</#if>"/>
+            <span class="pwd-toggle" onclick="togglePassword('password-confirm', 'eye-icon-reg2')">
+                <svg id="eye-icon-reg2" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+            </span>
+        </div>
     </div>
     </#if>
 
-    <#-- reCAPTCHA nếu được bật -->
     <#if recaptchaRequired??>
     <div class="kc-form-group" style="margin-top:4px;">
         <div class="g-recaptcha" data-size="normal" data-sitekey="${recaptchaSiteKey}"></div>
@@ -148,7 +116,6 @@
 
 </form>
 
-<#-- Social login (Identity Providers) -->
 <#if social.providers??>
 <div class="kc-divider"><span>hoặc tiếp tục với</span></div>
 <div style="display:flex;flex-direction:column;">
@@ -200,6 +167,18 @@ function checkStrength(val) {
     fill.style.background = lv.c;
     text.textContent = lv.t;
     text.style.color = lv.c;
+}
+
+function togglePassword(inputId, iconId) {
+    var input = document.getElementById(inputId);
+    var icon = document.getElementById(iconId);
+    if (input.type === "password") {
+        input.type = "text";
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />';
+    } else {
+        input.type = "password";
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />';
+    }
 }
 </script>
 

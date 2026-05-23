@@ -17,7 +17,7 @@ Hệ thống Identity & Access Management (IAM) sử dụng Keycloak — Đồ �
 
 ## 🏗️ Kiến trúc hệ thống
 
-```mermaid
+```
 Browser ──> Client App (Node.js) ──> Load Balancer (Nginx) ──> Keycloak Cluster (HA)
                                                                        ↕
                                                           Google / GitHub (Social Login)

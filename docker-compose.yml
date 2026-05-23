@@ -17,7 +17,7 @@ services:
     networks:
       - keycloak-net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -46,7 +46,7 @@ services:
     container_name: keycloak-node-1
 
     # Có thể dùng start-dev (lab) hoặc start (chuẩn hơn)
-    command: start-dev --cache=ispn
+    command: start-dev --cache=ispn --import-realm # <--- THÊM --import-realm
 
     environment:
       # Admin account
@@ -71,11 +71,13 @@ services:
       KC_HOSTNAME_PORT: 8080
       KC_HOSTNAME_STRICT_HTTPS: "false"
       KC_HTTP_ENABLED: "true"
+      KC_FEATURES: scripts # <--- THÊM DÒNG NÀY VÀO ĐÂY
 
     volumes:
       - keycloak_data_1:/opt/keycloak/data
       - ./keycloak/config/keycloak.conf:/opt/keycloak/conf/keycloak.conf
       - ./keycloak/themes:/opt/keycloak/themes
+      - ./realm-export.json:/opt/keycloak/data/import/realm.json # <--- THÊM DÒNG NÀY
 
     depends_on:
       postgres:
@@ -86,7 +88,7 @@ services:
 
     healthcheck:
       # Kiểm tra port 8080 đã mở chưa
-      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8080' || exit 1"]
+      test: [ "CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8080' || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -98,7 +100,7 @@ services:
   keycloak-2:
     image: quay.io/keycloak/keycloak:24.0.3
     container_name: keycloak-node-2
-    command: start-dev --cache=ispn
+    command: start-dev --cache=ispn --import-realm # <--- THÊM --import-realm
 
     environment:
       # (thêm admin cho đồng bộ)
@@ -121,11 +123,13 @@ services:
       KC_HOSTNAME_PORT: 8080
       KC_HOSTNAME_STRICT_HTTPS: "false"
       KC_HTTP_ENABLED: "true"
+      KC_FEATURES: scripts
 
     volumes:
       - keycloak_data_2:/opt/keycloak/data
       - ./keycloak/config/keycloak.conf:/opt/keycloak/conf/keycloak.conf
       - ./keycloak/themes:/opt/keycloak/themes
+      - ./realm-export.json:/opt/keycloak/data/import/realm.json # <--- THÊM DÒNG NÀY
 
     depends_on:
       postgres:
@@ -135,7 +139,7 @@ services:
       - keycloak-net
 
     healthcheck:
-      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8080' || exit 1"]
+      test: [ "CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8080' || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -151,10 +155,7 @@ services:
 
     # Chờ Keycloak cluster sẵn sàng rồi mới start app
     command: >
-      sh -c "until node -e \"fetch('http://nginx:8080/realms/master/.well-known/openid-configuration')
-      .then(r => process.exit(r.ok ? 0 : 1))
-      .catch(() => process.exit(1))\"; do
-      echo 'Waiting for Keycloak cluster...'; sleep 2; done; npm start"
+      sh -c "until node -e \"fetch('http://nginx:8080/realms/master/.well-known/openid-configuration') .then(r => process.exit(r.ok ? 0 : 1)) .catch(() => process.exit(1))\"; do echo 'Waiting for Keycloak cluster...'; sleep 2; done; npm start"
 
     ports:
       - "${APP_PORT:-3000}:3000"
@@ -181,6 +182,25 @@ services:
     depends_on:
       - nginx
 
+  # ─────────────────────────────────────────────
+  # SAML - Client ứng dụng sử dụng Keycloak
+  # ─────────────────────────────────────────────
+  saml-test-sp:
+    image: ghcr.io/beryju/saml-test-sp:latest
+    container_name: saml-test-sp
+    depends_on:
+      - nginx
+    ports:
+      - "8081:9009"
+    environment:
+      - SP_ENTITY_ID=http://localhost:8081/saml/metadata
+      # Sử dụng keycloak-lb để đi qua Nginx Load Balancer
+      - SP_METADATA_URL=http://keycloak-lb:8080/realms/uit-keycloak-realm/protocol/saml/descriptor
+      # THÊM DÒNG NÀY ĐỂ ĐỊNH NGHĨA LẠI ĐỊA CHỈ TRẢ VỀ CHUẨN
+      - SP_ROOT_URL=http://localhost:8081
+    networks:
+      - keycloak-net
+
 # ─────────────────────────────────────────────
 # Volumes
 # ─────────────────────────────────────────────
@@ -189,9 +209,9 @@ volumes:
   keycloak_data_1:
   keycloak_data_2:
 
-# ─────────────────────────────────────────────
-# Network nội bộ giữa các container
-# ─────────────────────────────────────────────
+    # ─────────────────────────────────────────────
+    # Network nội bộ giữa các container
+    # ─────────────────────────────────────────────
 networks:
   keycloak-net:
     driver: bridge

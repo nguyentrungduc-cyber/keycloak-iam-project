@@ -66,6 +66,16 @@ router.get('/callback', async (req, res) => {
     const realmRoles = accessTokenPayload?.realm_access?.roles || [];
     const clientRoles = accessTokenPayload?.resource_access?.myapp?.roles || [];
     const combinedRoles = [...new Set([...realmRoles, ...clientRoles])];
+
+    // Lọc bỏ các role mặc định của Keycloak (không hiển thị trên dashboard)
+    const systemDefaults = ['offline_access', 'uma_authorization', 'default-roles-uit-keycloak-realm'];
+    let filteredRoles = combinedRoles.filter(r => !systemDefaults.includes(r));
+
+    // Nếu user có bất kỳ role thực nào khác ngoài 'viewer' → tự động ẩn 'viewer'
+    const hasCustomRole = filteredRoles.some(r => r !== 'viewer');
+    if (hasCustomRole) {
+      filteredRoles = filteredRoles.filter(r => r !== 'viewer');
+    }
     req.session.tokenSet = {
       id_token: tokenSet.id_token,
       access_token: tokenSet.access_token,
@@ -77,7 +87,7 @@ router.get('/callback', async (req, res) => {
     };
     req.session.user = claims;
     req.session.accessTokenPayload = accessTokenPayload;
-    req.session.roles = combinedRoles;
+    req.session.roles = filteredRoles;
     delete req.session.oidc;
 
     return res.redirect('/dashboard');

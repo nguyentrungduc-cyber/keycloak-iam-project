@@ -1,7 +1,11 @@
-# GitHub OAuth Credentials
+# ⚫ GitHub OAuth Credentials (Mẫu)
 
-- **Client ID**: `Iv1.xxxxxxxxxxxxxxxxxxxxxxxx`
-- **Client Secret**: `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-- **Authorization callback URL**: `http://localhost:8080/realms/myapp-realm/broker/github/endpoint`
+> ⚠️ Đây là giá trị **placeholder**. Điền giá trị thật của nhóm vào file `.env`, **không** ghi secret thật vào file này rồi commit lên Git.
 
-*(Thay bằng thông tin thực tế khi bạn tạo)*
+| Trường | Giá trị mẫu |
+| :--- | :--- |
+| **Client ID** | `Iv1.xxxxxxxxxxxxxxxxxxxxxxxx` |
+| **Client Secret** | `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` |
+| **Authorization callback URL** | `http://localhost:8080/realms/myapp-realm/broker/github/endpoint` |
+
+📌 Xem hướng dẫn tạo OAuth App trên GitHub trong [`README_Social_Login.md`](README_Social_Login.md) hoặc [`../../docs/social-login.md`](../../docs/social-login.md).

@@ -1,4 +1,6 @@
-# Keycloak Configuration — MyApp
+# ⚙️ Keycloak Configuration — MyApp
+
+![Owner](https://img.shields.io/badge/Phụ%20trách-Thành%20viên%202-green?style=flat-square) ![Status](https://img.shields.io/badge/Trạng%20thái-Hoàn%20thành-brightgreen?style=flat-square)
 
 Hướng dẫn cấu hình Keycloak cho ứng dụng MyApp trên realm `uit-keycloak-realm`.
 

@@ -1,4 +1,6 @@
-# Hướng dẫn Cấu hình Nghiệp vụ Keycloak
+# 🛠️ Hướng dẫn Cấu hình Nghiệp vụ Keycloak
+
+![Stage](https://img.shields.io/badge/Giai%20đoạn-1--2-blue?style=flat-square) ![Status](https://img.shields.io/badge/Trạng%20thái-Hoàn%20thành-brightgreen?style=flat-square)
 
 Tài liệu này hướng dẫn cơ bản cách thiết lập Realm, Token, Session và phân quyền User để đảm bảo hệ thống đạt được sự cân bằng giữa bảo mật và trải nghiệm người dùng.
 

@@ -1,4 +1,6 @@
-# Hướng dẫn tích hợp Social Login (Google + GitHub) - Thành viên 3
+# 🌐 Hướng dẫn tích hợp Social Login (Google + GitHub) — Thành viên 3
+
+![Owner](https://img.shields.io/badge/Phụ%20trách-Thành%20viên%203-orange?style=flat-square) ![Status](https://img.shields.io/badge/Trạng%20thái-Hoàn%20thành-brightgreen?style=flat-square)
 
 ## Thông tin chung
 - Realm: `myapp-realm`

@@ -26,7 +26,7 @@ Luồng hoạt động cơ bản: người dùng truy cập SP → SP redirect s
 URL metadata công khai của Keycloak cho một realm cụ thể:
 
 ```
-http://localhost:8080/realms/myrealm/protocol/saml/descriptor
+http://localhost:8080/realms/uit-keycloak-realm/protocol/saml/descriptor
 ```
 
 Tải file XML này về và cung cấp cho phía SP để họ cấu hình tin cậy (trust) với Keycloak.

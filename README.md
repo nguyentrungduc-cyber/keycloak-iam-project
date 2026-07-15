@@ -71,7 +71,7 @@ Dự án triển khai một hệ thống **IAM (Identity & Access Management)** 
 | Client App | Ứng dụng minh họa, đăng nhập qua Keycloak | Node.js / Express |
 | Load Balancer | Phân tải & định tuyến request đến cụm Keycloak | Nginx |
 | Keycloak Cluster | Identity Provider trung tâm (Auth, RBAC, MFA, SAML) | Keycloak (HA mode) |
-| Database | Lưu trữ dữ liệu Realm, Users, Sessions | PostgreSQL / MySQL |
+| Database | Lưu trữ dữ liệu Realm, Users, Sessions | PostgreSQL (local/dev qua Docker) — MySQL/Aiven chỉ dùng khi deploy lên cloud |
 
 ---
 
@@ -101,33 +101,36 @@ cp .env.example .env
 
 Sau đó mở file `.env` và điền các giá trị thực tế: mật khẩu DB, admin Keycloak, client secret của Google/GitHub OAuth (xem thêm tại [`myapp/keycloak-config/`](myapp/keycloak-config/)).
 
-### 3️⃣ Khởi động Keycloak (+ DB, Nginx) bằng Docker Compose
+### 3️⃣ Khởi động toàn bộ hệ thống bằng Docker Compose
 
 ```bash
 docker-compose up -d
 ```
 
-| Dịch vụ | Địa chỉ |
-| :--- | :--- |
-| Keycloak | http://localhost:8080 |
-| Admin Console | http://localhost:8080/admin |
-| Đăng nhập admin | theo `KEYCLOAK_ADMIN` / `KEYCLOAK_ADMIN_PASSWORD` trong `.env` |
+Lệnh này khởi động **toàn bộ** hệ thống cùng lúc — không cần chạy thêm bước nào khác:
 
-### 4️⃣ Import Realm có sẵn
+| Dịch vụ | Container | Địa chỉ |
+| :--- | :--- | :--- |
+| PostgreSQL | `keycloak-db` | nội bộ, không expose port ra ngoài |
+| Nginx (Load Balancer) | `keycloak-lb` | http://localhost:8080 |
+| Keycloak Node 1 & 2 | `keycloak-node-1`, `keycloak-node-2` | truy cập qua Nginx ở port 8080 |
+| MyApp (Client App) | `myapp-server` | http://localhost:3000 |
+| SAML Test SP (demo) | `saml-test-sp` | http://localhost:8081 |
 
-Vào **Admin Console → Create realm → Import file** và chọn `keycloak/realm-export.json`. File này đã chứa sẵn cấu hình Realm, Roles, và Clients mẫu.
+- **Admin Console:** http://localhost:8080/admin — đăng nhập bằng `KC_ADMIN_USER` / `KC_ADMIN_PASSWORD` trong `.env`.
+- **Realm được tự động import** khi container khởi động lần đầu (nhờ cờ `--import-realm` trong `docker-compose.yml`), lấy dữ liệu từ `keycloak/realm/realm-export.json` — **không cần** vào Admin Console import tay.
 
-### 5️⃣ Chạy Client App
+> ⚠️ **Lưu ý cấu hình cần kiểm tra:** `docker-compose.yml` đang mount realm export từ đường dẫn `./realm-export.json` (thư mục gốc), nhưng file thật hiện nằm ở `keycloak/realm/realm-export.json`. Nếu sau khi `docker-compose up` mà Realm không tự import được, hãy copy file vào đúng đường dẫn gốc hoặc sửa lại path trong `docker-compose.yml` (mục `keycloak-1`/`keycloak-2` → `volumes`).
 
-```bash
-cd myapp
-npm install
-npm start
-```
+### 4️⃣ Kiểm tra ứng dụng Client (MyApp)
 
-Ứng dụng chạy tại: **http://localhost:3000**
+MyApp đã tự chạy sẵn cùng `docker-compose up -d` ở bước trên (container `myapp-server`), **không cần** cài/chạy `npm start` thủ công. Truy cập trực tiếp:
 
-### 6️⃣ (Tùy chọn) Tạo nhanh users mẫu
+**http://localhost:3000**
+
+Chỉ cần chạy `npm install && npm start` thủ công trong thư mục `myapp/` nếu bạn muốn code/debug bên ngoài Docker (dev mode không qua container).
+
+### 5️⃣ (Tùy chọn) Tạo nhanh users mẫu
 
 ```bash
 bash scripts/seed-users.sh

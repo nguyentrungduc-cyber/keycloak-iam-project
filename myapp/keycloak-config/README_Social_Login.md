@@ -3,7 +3,7 @@
 ![Owner](https://img.shields.io/badge/Phụ%20trách-Thành%20viên%203-orange?style=flat-square) ![Status](https://img.shields.io/badge/Trạng%20thái-Hoàn%20thành-brightgreen?style=flat-square)
 
 ## Thông tin chung
-- Realm: `myapp-realm`
+- Realm: `uit-keycloak-realm`
 - Thời gian: 03/04/2026 – 10/04/2026
 
 ## 1. Google OAuth
@@ -14,7 +14,7 @@
 - Client Secret: `GOCSPX-xxxxxxxxxxxxxxxxxxxxxxxx`
 
 **Authorized Redirect URIs:**
-- `http://localhost:8080/realms/myapp-realm/broker/google/endpoint`
+- `http://localhost:8080/realms/uit-keycloak-realm/broker/google/endpoint`
 
 ## 2. GitHub OAuth
 
@@ -24,7 +24,7 @@
 - Client Secret: `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 
 **Authorization callback URL:**
-- `http://localhost:8080/realms/myapp-realm/broker/github/endpoint`
+- `http://localhost:8080/realms/uit-keycloak-realm/broker/github/endpoint`
 
 ## 3. Cấu hình trong Keycloak
 

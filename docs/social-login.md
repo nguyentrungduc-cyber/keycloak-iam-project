@@ -16,13 +16,13 @@
 4. **Application type**: chọn **Web application**.
 5. **Authorized redirect URIs**, điền đúng endpoint broker của Keycloak:
    ```
-   http://localhost:8080/realms/myrealm/broker/google/endpoint
+   http://localhost:8080/realms/uit-keycloak-realm/broker/google/endpoint
    ```
 6. Lưu lại **Client ID** và **Client Secret**, dán vào file `.env` (xem mẫu tại [`myapp/keycloak-config/google-oauth-credentials.md`](../myapp/keycloak-config/google-oauth-credentials.md)).
 
 ### Bước 2 — Cấu hình trong Keycloak
 
-1. Vào **Realm `myrealm` → Identity Providers → Add provider → Google**.
+1. Vào **Realm `uit-keycloak-realm` → Identity Providers → Add provider → Google**.
 2. Dán **Client ID** và **Client Secret** vừa lấy từ Google Console.
 3. Nhấn **Save**.
 4. Kiểm tra: trang đăng nhập của realm sẽ xuất hiện nút **"Sign in with Google"**.
@@ -39,7 +39,7 @@
 2. **Homepage URL**: `http://localhost:3000`
 3. **Authorization callback URL**, điền đúng endpoint broker của Keycloak:
    ```
-   http://localhost:8080/realms/myrealm/broker/github/endpoint
+   http://localhost:8080/realms/uit-keycloak-realm/broker/github/endpoint
    ```
 4. Lưu lại **Client ID** và **Client Secret** (xem mẫu tại [`myapp/keycloak-config/github-oauth-credentials.md`](../myapp/keycloak-config/github-oauth-credentials.md)).
 

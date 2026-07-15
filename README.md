@@ -31,14 +31,27 @@ Dự án triển khai một hệ thống **IAM (Identity & Access Management)** 
 
 ## 👥 Thành viên nhóm & Phân công nhiệm vụ
 
-| Thành viên | Giai đoạn | Thời gian | Nhiệm vụ chính |
-| :--- | :---: | :---: | :--- |
-| 🟦 **Đạt** | Giai đoạn 1 | 23/03 – 30/03 | Dựng hạ tầng Docker (Keycloak + DB + Nginx), tạo Realm, Users, Roles cơ bản |
-| 🟩 **Danh** | Giai đoạn 2 | 31/03 – 09/04 | Xây dựng OIDC Client App (Node.js), luồng Registration, tùy biến Theme đăng nhập |
-| 🟨 **Sử** | Giai đoạn 3 | 10/04 – 19/04 | Triển khai RBAC, cấu hình MFA (TOTP + WebAuthn) |
-| 🟧 **Đạt** | Giai đoạn 4 | 20/04 – 28/04 | Tích hợp SAML 2.0, Social Login (Google/GitHub), tổng hợp tài liệu |
+*Bảng dưới đây được đối chiếu trực tiếp từ lịch sử commit thật (`git log`), không phải kế hoạch dự kiến ban đầu.*
 
-> 💡 Chi tiết công việc từng giai đoạn được ghi trong các file tài liệu ở thư mục [`docs/`](docs/).
+| Thành viên | Nhiệm vụ chính | Thời gian |
+| :--- | :--- | :---: |
+| 🟦 **Đức** (chủ repo) | Khởi tạo cấu trúc dự án, README, `.env.example`, cấu hình `myapp` ban đầu | 01/04 – 04/04 |
+| 🟩 **Đạt** | Cấu hình PostgreSQL cho Keycloak, viết tài liệu cấu hình Keycloak, đồng bộ `.env.example` | 04/04 – 05/04 |
+| 🟦 **Đức** | Cập nhật README, chỉnh đường dẫn cấu hình Keycloak, hoàn thành export Realm | 06/04 |
+| 🟩 **Đạt** | Dựng giao diện Landing Page (EJS), hoàn thiện UI trang login/error/info trên Keycloak theme | 06/04 – 08/04 |
+| 🟨 **Sử** | Cấu hình Role, Group cho Realm | 06/04 |
+| 🟦 **Đức** | Fix bugs, đổi cấu trúc thư mục client-app → `myapp` | 08/04 |
+| 🟧 **Danh** | Chuyển backend từ `keycloak-connect` sang `openid-client` (chuẩn PKCE), session-based guards, async init | 09/04 |
+| 🟦 **Đức** | Viết các theme FreeMarker: `register.ftl`, `reset-password.ftl`, `update-password.ftl`, `template.ftl`, email verification, `error.ftl`/`info.ftl` | 09/04 – 10/04 |
+| 🟧 **Danh** | Hoàn thành Dashboard cơ bản, cấu hình `myapp` chỉ chạy sau khi Keycloak healthy, đồng bộ giao diện dashboard | 13/04 – 17/04 |
+| 🟧 **Danh** | Viết tài liệu mô tả chi tiết cấu trúc dự án (`PROJECT_STRUCTURE.md`) | 03/05 |
+| 🟩 **Đạt** | Triển khai Keycloak **HA thật** (multi-node, shared DB, Nginx Load Balancer, test failover) | 04/05 |
+| 🟦 **Đức** | Hoàn thành **Social Login** (Google + GitHub), sửa lại Realm export | 05/05 – 11/05 |
+| 🟩 **Đạt** | Fix xung đột merge, sửa `KC_SERVER_URL`, cập nhật `setup.md` | 12/05 |
+| 🟨 **Sử** | Kiểm tra lại Realm, sửa cấu hình **Passkey/WebAuthn** | 12/05 – 16/05 |
+| 🟦 **Đức** | Hoàn thành **SAML 2.0**, kiểm tra tổng thể toàn hệ thống | 15/05 – 23/05 |
+
+> 💡 Chi tiết kỹ thuật từng phần được ghi trong các file tài liệu ở thư mục [`docs/`](docs/).
 
 ---
 
@@ -175,6 +188,6 @@ bash scripts/seed-users.sh
 
 <div align="center">
 
-*Đồ án học phần — nhóm phát triển: Đạt · Danh · Sử*
+*Đồ án học phần — nhóm phát triển: Đức · Đạt · Danh · Sử*
 
 </div>
